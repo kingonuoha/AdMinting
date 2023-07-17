@@ -51,7 +51,7 @@ Route::middleware([
         $user = User::where('dialogue_last_complete', 0)->get();
         // dbNotify("Hi Bruh", 'this is your first notification', 'success', $user, getIcon('bank'), true);
         return view('ADM_creators.dashboard', [
-            'current_page' => ucwords(auth()->user()->brandInfos->brand_name).' Dashboard',
+            'current_page' => ucwords(auth()->user()->name).' Dashboard',
             
         ]);
         
