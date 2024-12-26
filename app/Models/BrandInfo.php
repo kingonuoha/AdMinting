@@ -10,7 +10,10 @@ class BrandInfo extends Model
     use HasFactory;
 
     protected $fillable = [
+        'short_desc',
+        'description',
         'brand_name',
+        'banner_path',
         'position',
         'logo_path',
         'phone_number',

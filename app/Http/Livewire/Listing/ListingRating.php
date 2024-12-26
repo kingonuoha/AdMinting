@@ -55,7 +55,8 @@ class ListingRating extends Component
                 $avgRating =  $this->applicant->ratings()->average('applicant_rating');
                 $this->applicant->rating = $avgRating;
                 $this->applicant->save();
-
+                
+                createLog("you rated a user", getIcon('trophy'), 'warning');
                $this->dispatchBrowserEvent('rate_modal:close');
                return  $this->dispatchBrowserEvent('success_alert', [
                     'message'=> "Thank you for taking the time to rate your experience and provide valuable feedback. 
@@ -64,6 +65,7 @@ class ListingRating extends Component
                     We appreciate your participation and look forward to serving you again in the future!"
                 ]);
                 // Livewire::refresh();
+
             }else{
               return   $this->dispatchBrowserEvent('warning_alert', [
                     'message'=> "You cant rate more than once!"

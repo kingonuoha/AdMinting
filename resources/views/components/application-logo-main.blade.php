@@ -1,0 +1,1 @@
+<img {{ $attributes->merge(['class' => '']) }} src="{{asset('guest/assets/images/logo/site_logo_dark_2.svg')}}" alt="logo">

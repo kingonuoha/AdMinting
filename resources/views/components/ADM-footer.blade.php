@@ -1,26 +1,22 @@
-<div id="kt_app_footer" class="app-footer">
-   
-    <!--begin::Footer container-->
-    <div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
-        <!--begin::Copyright-->
-        <div class="text-dark order-2 order-md-1">
-            <span class="text-muted fw-semibold me-1"><script>document.write(new Date().getFullYear())</script>&copy;</span>
-            <a href="{{route('dashboard')}}" target="_blank" class="text-gray-800 text-hover-primary">{{ucwords(appSetting("app_name"))}}</a>
-        </div>
-        <!--end::Copyright-->
-        <!--begin::Menu-->
-        <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
-            <li class="menu-item">
-                <a href="{{route('dashboard')}}" target="_blank" class="menu-link px-2">About</a>
-            </li>
-            <li class="menu-item">
-                <a href="https://devs.keenthemes.com/" target="_blank" class="menu-link px-2">Support</a>
-            </li>
-            <li class="menu-item">
-                <a href="https://1.envato.market/EA4JP" target="_blank" class="menu-link px-2">Purchase</a>
-            </li>
-        </ul>
-        <!--end::Menu-->
-    </div>
-    <!--end::Footer container-->
+<div class="footer bg-white py-4 d-flex flex-lg-column " id="kt_footer">
+	<!--begin::Container-->
+	<div class=" container-fluid  d-flex flex-column flex-md-row align-items-center justify-content-between">
+		<!--begin::Copyright-->
+		<div class="text-dark order-2 order-md-1">
+			<span class="text-muted font-weight-bold mr-2">2023©</span>
+			<a href="http://keenthemes.com/metronic" target="_blank" class="text-dark-75 text-hover-primary">adcrea8</a>
+			<button id="start-tour" class="btn btn-info">?</button>
+
+		</div>
+		<!--end::Copyright-->
+
+		<!--begin::Nav-->
+		<div class="nav nav-dark">
+			<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-5">About</a>
+			<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-5">Team</a>
+			<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
+		</div>
+		<!--end::Nav-->
+	</div>
+	<!--end::Container-->
 </div>

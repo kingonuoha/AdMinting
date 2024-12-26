@@ -6,6 +6,8 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 		<title>@yield('title')</title>
+		<link rel="shortcut icon" href="{{ asset('guest/assets/images/logo/favourite_icon.svg') }}">
+
 		<meta charset="utf-8" />
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Blazor, Django, Flask & Laravel versions. Grab your copy now and get life-time updates for free." />
 		<meta name="keywords" content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Blazor, Django, Flask & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
@@ -21,7 +23,7 @@
 		<meta property="og:url" content="https://keenthemes.com/metronic" />
 		<meta property="og:site_name" content="Keenthemes | Metronic" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="{{asset('users/assets/media/logos/favicon.ico')}}" />
+		<link rel="shortcut icon" href="{{ asset('guest/assets/images/logo/favourite_icon.svg') }}" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 		<link href="{{asset('users/assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
@@ -78,8 +80,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					<!--begin::Aside-->
 					<div class="d-flex flex-center flex-lg-start flex-column">
 						<!--begin::Logo-->
-						<a href="../../../index.html" class="mb-7">
-							<img alt="Logo" src="{{asset('users/assets/media/logos/custom-3.svg')}}" />
+						<a href="{{route('guest.home')}}" class="mb-7">
+							<img class='w-300px' alt="Logo" src="{{ asset('guest/assets/images/logo/site_logo_white.svg') }}" />
 						</a>
 						<!--end::Logo-->
 						<!--begin::Title-->
@@ -96,6 +98,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		<!--begin::Javascript-->
 		{{-- <script>var hostUrl = "{{route('welcome')}}";</script> --}}
 		<!--begin::Global Javascript Bundle(used by all pages)-->
+		
 		<script src="{{asset('users/assets/plugins/global/plugins.bundle.js')}}"></script>
 		<script src="{{asset('users/assets/js/scripts.bundle.js')}}"></script>
 		<!--end::Global Javascript Bundle-->

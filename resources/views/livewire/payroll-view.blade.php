@@ -40,8 +40,10 @@
                         <!--end::Select2-->
                     </div>
                     <!--begin::Add product-->
-                    <a href="{{route('dashboard')}}" class="btn btn-primary">Dashboard</a>
-                    <!--end::Add product-->
+                    {{-- <div class="d-flex flex-column">
+                        <span class="text-grey-500">Balance:</span>
+                        <span class="fw-bold text-success"> NGN{{formatMoney($balance)}}</span>
+                    </div> --}}
                 </div>
                 <!--end::Card toolbar-->
             </div>
@@ -54,12 +56,12 @@
                 <table class="table table-striped gy-7 gs-7">
                     <thead>
                         <tr class="fw-semibold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-                            <th class="min-w-200px">User</th>
-                            <th class="min-w-400px">Listing</th>
+                            <th class="min-w-100px">User</th>
+                            <th class="min-w-100px">Listing</th>
                             <th class="min-w-100px">Amount</th>
-                            <th class="min-w-200px">Status</th>
-                            <th class="min-w-200px">Marked For payment</th>
-                            <th class="min-w-200px">Actions</th>
+                            <th class="min-w-100px">Status</th>
+                            <th class="min-w-100px">Marked For payment</th>
+                            <th class="min-w-100px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,7 +100,7 @@
                         <a target="_blank" href="{{route('listing.dashboard', $payroll->listing->slug)}}" class="active-primary"> {{$payroll->listing->title}}</a>
                        </td>
                        <td>
-                        <p class="text-success">N{{$payroll->amount}}</p>
+                        <p class="text-success">NGN{{formatMoney($payroll->amount)}}</p>
                        </td>
                        <td>
                         @if ($payroll->payment_status == 'paid')
@@ -121,7 +123,7 @@
                         
                        </td>
                        <td>
-                        <div class="badge px-2 text-white">
+                        <div class="badge px-2 fw-bold badge-secondary">
                             {{time_Ago($payroll->created_at)}}
                         </div>
                        </td>
@@ -133,9 +135,9 @@
                            Paid
                         </button>
                         @else
-                        <button class="btn btn-sm btn-light-success text-success">
+                        <x-button  loading="payOut" wire:click.prevent="payOut({{$payroll->id}})" class="btn btn-sm btn-light-success text-success">
                             Pay User
-                         </button>
+                         </x-button>
                         @endif
                        </td>
 

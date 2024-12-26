@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ListingFiles extends Model
 {
-    protected $fillables = [
+    protected $fillable = [
         'uploaded_by',
         'listing_id',
         'name',
         'folder',
         'type',
+        'unique_hash',
+        'listing_id',
+        'id',
         'size',
     ];
     use HasFactory;

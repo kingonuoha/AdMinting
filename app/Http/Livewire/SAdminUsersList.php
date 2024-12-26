@@ -47,6 +47,10 @@ class SAdminUsersList extends Component
        $this->dispatchBrowserEvent('success_alert', [
         'message' => $user->name. ' Has been successfully made Admin, and now hass access to all features that admin have access to'
        ]);
+       createLog("you made ".$user->name. " Admin", getIcon('users'), 'warning');
+       createLog("you have been made an admin", getIcon('user-shield'), 'success', $user->id);
+
+
     }
     public function removeAdminConfirmed ($user_id){
        $user = User::find($user_id);
@@ -56,6 +60,9 @@ class SAdminUsersList extends Component
        $this->dispatchBrowserEvent('success_alert', [
         'message' => $user->name. ' Has been successfully made a Creator, and now hass access to all features that creators have access to'
        ]);
+       createLog("you've removed ".$user->name. " from being an Admin", getIcon('users'), 'warning');
+       createLog("your admin previledges has been revoked", getIcon('user-shield'), 'success', $user->id);
+
     }
     public function makeAdminConfirm ($user_id){
        $this->dispatchBrowserEvent('makeAdmin:confirmation', [

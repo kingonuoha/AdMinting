@@ -60,7 +60,10 @@ class AccountPersonalInfoCreator extends Component
             ]],
         ]);
 
-        array_push($this->phone_numbers, ["number"=>$this->phone_number]);
+        if(in_array($this->phone_number, $this->phone_numbers, true)){
+            return $this->addError('phone_number', 'Phone number already exists, pls insert another number!'); 
+        }
+        $this->phone_numbers = array_merge($this->phone_numbers, [$this->phone_number]);
         if (!is_null($this->user->advertiserInfos)) {
             $advertiserDetails = $this->user->advertiserInfos->update([
                 'phone_number' => $this->phone_numbers
@@ -98,6 +101,8 @@ class AccountPersonalInfoCreator extends Component
                 "type"=>"success"
             ]);
          }
+         createLog("you updated your profile", getIcon('layers'), 'info');
+
     }
     public function render()
     {

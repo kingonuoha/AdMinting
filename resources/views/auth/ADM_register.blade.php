@@ -1,6 +1,6 @@
 @extends('layouts.ADM-auth')
 @section('title')
-AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Create Account
+{{env("app_name")}}  | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Create Account
 @endsection
 @section('content')
     <!--begin::Body-->
@@ -9,6 +9,7 @@ AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Creat
         <div class="card rounded-3 w-md-550px">
             <!--begin::Card body-->
             <div class="card-body p-10 p-lg-20">
+               
                 <!--begin::Form-->
                 <form class="form w-100" method="POST" action="{{ (isset($type) && $type == 'brand') ? route('register', ['type' => $type]) : route('register') }}">
                     @csrf
@@ -21,6 +22,7 @@ AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Creat
                         <div class="text-gray-500 fw-semibold fs-6">{{ (isset($type) && $type == 'brand') ? "As an Brand" : "As a Creator" }}</div>
                         <!--end::Subtitle=-->
                     </div>
+                    
                     <!--begin::Heading-->
                     <!--begin::Login options-->
                     <div class="row g-3 mb-9">
@@ -105,8 +107,8 @@ AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Creat
     
                                 <div class="ml-2 ">
                                     {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                            'terms_of_service' => '<a target="_blank" class="link-primary fs-bold" href="'.route('terms.show').'" >'.__('Terms of Service').'</a>',
-                                            'privacy_policy' => '<a target="_blank" class="link-primary fs-bold" href="'.route('policy.show').'" >'.__('Privacy Policy').'</a>',
+                                            'terms_of_service' => '<a target="_blank" class="link-primary fs-bold" href="'.route('guest.privacy_policy').'" >'.__('Terms of Service').'</a>',
+                                            'privacy_policy' => '<a target="_blank" class="link-primary fs-bold" href="'.route('guest.privacy_policy').'" >'.__('Privacy Policy').'</a>',
                                     ]) !!}
                                 </div>
                             </div>
@@ -127,9 +129,13 @@ AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Creat
                         </button>
                     </div>
                     <!--end::Submit button-->
+                    <div class="text-gray-500 text-center fw-semibold fs-6  mb-2">You are registering as a <span  class="link-primary fw-semibold">{{(request('type') == 'brand')? "brand":"creator"}}</span>, sign up as a <a href="{{(request('type') == 'brand')? route('register'):route('register', ['type'=>"brand"])}}" class="link-primary fw-semibold">{{(request('type') == 'brand')? "creator":"brand"}}</a> instead? 
+                    </div>
                     <!--begin::Sign up-->
                     <div class="text-gray-500 text-center fw-semibold fs-6">Already have an Account? 
                     <a href="{{route('login')}}" class="link-primary fw-semibold">Sign in</a></div>
+
+                    
                     <!--end::Sign up-->
                 </form>
                 <!--end::Form-->
@@ -140,3 +146,4 @@ AdMinting | {{ (isset($type) && $type == 'brand') ? "Brand" : "Creator" }} Creat
     </div>
     <!--end::Body-->
 @endsection
+

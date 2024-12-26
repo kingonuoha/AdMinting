@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'creators.route',
+    'role:creator',
     'adm.app_track_views'
 ])->group(function(){
 
  Route::get('creators/onboarding', function () {
+    // dd(auth()->user()->dialogue_complete);
     if(!auth()->user()->dialogue_complete){
-
+        // dd("hi");
         return view('ADM_creators.dialogue');
     }else{
         return redirect()->route('dashboard');

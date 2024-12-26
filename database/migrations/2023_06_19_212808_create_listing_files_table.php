@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('folder')->nullable();
             $table->string('type')->nullable();
+            $table->string('unique_hash')->nullable();
             $table->string('size')->nullable();
             $table->timestamps();
         });

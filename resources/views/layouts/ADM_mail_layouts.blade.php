@@ -84,7 +84,7 @@ License: For each use you must have a valid license purchased only from above li
 												<!--begin:Logo-->
 												<div style="margin-bottom: 10px">
 													<a href="https://keenthemes.com/" rel="noopener" target="_blank">
-														<img alt="Logo" src="{{asset('users/assets/media/email/logo-1.svg')}}" style="height: 35px" />
+														<img alt="Logo" src="{{ asset('guest/assets/images/logo/site_logo_dark.svg') }}" style="height: 35px" />
 													</a>
 												</div>
 												<!--end:Logo-->

@@ -20,7 +20,9 @@ class ADMPartOfListing
         if($listing_slug){
             $listing = Listing::where('slug', $listing_slug)->first();
             if (auth()->user()->id !== $listing->user_id || auth()->user()->id !== $listing->onboarded_by || auth()->user()->role != 'adm_admin') {
-                return redirect()->to('/dashboard')->with('error_toast','You ar not allowed to view, because you were not part of the project');
+            createLog("you tried to enter an unauthorised page", getIcon('warning'), 'danger');
+
+                return redirect()->to('/dashboard')->with('error_toast','You are not allowed to view, because you were not part of the project');
             }
             
         }else{

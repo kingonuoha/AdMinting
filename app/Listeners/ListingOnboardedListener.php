@@ -3,8 +3,10 @@
 namespace App\Listeners;
 
 use App\Jobs\ListingOnboarded;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Mail\ListingOnboarded_ApplicantMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ListingOnboardedListener
 {
@@ -21,7 +23,10 @@ class ListingOnboardedListener
      */
     public function handle(object $event): void
     {
-        //
-        dispatch(new ListingOnboarded($event))->delay(now()->addMinute(1));
+        // getIcon();
+        // Mail::to($event->applicant->email)->send(new ListingOnboarded_ApplicantMail($event->applicant, $event->event->listing, $event->brand));
+        Mail::to($event->applicant->email)->later(now()->addMinutes(0.17), new ListingOnboarded_ApplicantMail($event->applicant, $event->event->listing, $event->brand)); // 10 seconds
+
+        dispatch(new ListingOnboarded($event));
     }
 }

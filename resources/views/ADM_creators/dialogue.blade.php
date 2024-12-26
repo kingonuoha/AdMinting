@@ -2,7 +2,7 @@
 <html lang="en">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
-		<title>AdMinting | Creators Onboarding</title>
+		<title>{{env("app_name")}} | Creators Onboarding</title>
 		<meta charset="utf-8" />
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Blazor, Django, Flask & Laravel versions. Grab your copy now and get life-time updates for free." />
 		<meta name="keywords" content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Blazor, Django, Flask & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
@@ -13,7 +13,7 @@
 		<meta property="og:url" content="https://keenthemes.com/metronic" />
 		<meta property="og:site_name" content="Keenthemes | Metronic" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="{{asset('users/assets/media/logos/favicon.ico')}}" />
+		<link rel="shortcut icon" href="{{ asset('guest/assets/images/logo/favourite_icon.svg') }}">
 		<!--begin::Fonts-->	<link href="{{asset('notifications/css/lobibox.css')}}" rel="stylesheet" />
 		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
@@ -187,50 +187,7 @@
 		})
 
 
-		// socials 
-		function google_redirect() {
-         
-         // open the page as popup //
-         var page = @js(route('google.redirect'));
-         var myWindow = window.open(page, "_blank", "scrollbars=yes,width=400,height=500,top=300");
-         
-         // focus on the popup //
-         myWindow.focus();
-         
-         // if you want to close it after some time (like for example open the popup print the receipt and close it) //
-        //  myWindow.close();
-        //  setTimeout(function() {
-        //    myWindow.close();
-        //  }, 1000);
-        
-       }
-    function github_redirect() {
-         
-         // open the page as popup //
-         var page = @js(route('github.redirect'));
-         var myWindow = window.open(page, "_blank", "scrollbars=yes,width=400,height=500,top=300");
-         
-         // focus on the popup //
-         myWindow.focus();
-         
-         // if you want to close it after some time (like for example open the popup print the receipt and close it) //
-        
-        
-       }
-    function linkedin_redirect() {
-         
-         // open the page as popup //
-         var page = @js(route('linkedin.redirect'));
-         var myWindow = window.open(page, "_blank", "scrollbars=yes,width=400,height=500,top=300");
-         
-         // focus on the popup //
-         myWindow.focus();
-         
-       
-        
-       }
-
-
+  
 	   
 	</script> 
 

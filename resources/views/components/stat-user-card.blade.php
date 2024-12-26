@@ -6,14 +6,18 @@
         <!--begin::Member-->
         <div class="d-flex flex-column text-center mb-9 px-9">
             <!--begin::Photo-->
-            <div class="symbol symbol-80px symbol-lg-150px mb-4">
-                <img src="{{asset('storage/company_logo/'.$user->brandInfos->logo_path)}}" class="" alt="">
+            <div class="symbol h-80px symbol-80px symbol-lg-150px mb-4 bg-light-secondary text-secondary fw-bold text-center">
+                @if (empty($user->brandInfos->logo_path))
+                   <h2 class="text-secondary my-auto mx-auto">NO IMG</h2>
+                @else
+                <img src="{{asset('storage/'.$user->brandInfos->logo_path)}}" class="" alt="">
+                @endif
             </div>
             <!--end::Photo-->
             <!--begin::Info-->
             <div class="text-center">
                 <!--begin::Name-->
-                <a href="../user-profile/overview.html" class="text-gray-800 fw-bold text-hover-primary fs-4">{{$user->brandInfos->brand_name}}</a>
+                <a href="{{route('account.brand_settings')}}" class="text-gray-800 fw-bold text-hover-primary fs-4">{{$user->brandInfos->brand_name}}</a>
                 <!--end::Name-->
                 <!--begin::Position-->
                 <span class="text-muted d-block fw-semibold">{{$user->brandInfos->location}}</span>

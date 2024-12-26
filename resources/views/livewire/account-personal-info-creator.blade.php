@@ -111,10 +111,7 @@
                              <!--begin::Icon-->
                              <!--begin::Svg Icon | path: icons/duotune/art/art006.svg-->
                              <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                   <path opacity="0.3" d="M22 19V17C22 16.4 21.6 16 21 16H8V3C8 2.4 7.6 2 7 2H5C4.4 2 4 2.4 4 3V19C4 19.6 4.4 20 5 20H21C21.6 20 22 19.6 22 19Z" fill="currentColor"></path>
-                                   <path d="M20 5V21C20 21.6 19.6 22 19 22H17C16.4 22 16 21.6 16 21V8H8V4H19C19.6 4 20 4.4 20 5ZM3 8H4V4H3C2.4 4 2 4.4 2 5V7C2 7.6 2.4 8 3 8Z" fill="currentColor"></path>
-                                </svg>
+                               {!! getIcon("users") !!}
                              </span>
                              <!--end::Svg Icon-->
                              <!--end::Icon-->
@@ -124,9 +121,10 @@
                                 <div class="fw-semibold">
                                    <div class="fs-6 text-gray-700">
                                     <ul>
-                                    @foreach ($user->advertiserInfos->phone_number as $item)
-                                        <li class="text-warning fw-bold">{{$item['number']}}</li>
-                                    @endforeach
+                                    @forelse ($user->advertiserInfos->phone_number as $item)
+                                        <li class="text-warning fw-bold">{{$item}}</li>
+                                        @empty
+                                    @endforelse
                                 </ul>
                                    </div>
                                 </div>
@@ -174,6 +172,8 @@
 </div>
 
 @push('script')
+<script type="module" src="{{asset('users/assets/js/custom/shepherdjs-tour.js')}}"> </script>
+
     <script>
 
 $("#kt_datepicker_1").flatpickr({

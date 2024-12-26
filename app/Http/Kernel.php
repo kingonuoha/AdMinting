@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -39,7 +40,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -63,12 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'creators.dialogue_complete' => \App\Http\Middleware\CreatorsCheckIfDialogueCompleted::class,
-        'creators.route' => \App\Http\Middleware\CreatorsRouteOnly::class,
-        'brand.dialogue_complete' => \App\Http\Middleware\BrandCheckIfDialogueCompleted::class,
-        'brand.route' => \App\Http\Middleware\BrandRouteOnly::class,
-        'adm.not_super_admin' => \App\Http\Middleware\ADMNotSuperAdmin::class,
-        'adm.must_be_super_admin' => \App\Http\Middleware\ADMMustBeSuperAdmin::class,
+        'check.dialogue' => \App\Http\Middleware\CheckIfDialogueCompleted::class,
+        'role' => RoleMiddleware::class,
         'adm.part_of_listing' => \App\Http\Middleware\ADMPartOfListing::class,
         'adm.app_track_views' => \App\Http\Middleware\appVisitTrackMiddleware::class,
     ];

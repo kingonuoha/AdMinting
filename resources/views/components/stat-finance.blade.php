@@ -30,15 +30,17 @@
                             <div class="menu-item px-3">
                                 <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Payments</div>
                             </div>
-                            <!--end::Heading-->
-                            @foreach ((new \App\Http\Livewire\SideBar())->links()['Finance'] as $link)
-                                
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="{{$link['url']}}" class="menu-link px-3">{{$link['title']}}</a>
-                            </div>
-                            <!--end::Menu item-->
+                            @foreach ((new \App\Http\Livewire\SideBar())->links() as $item)
+                            @foreach ($item['category'] as $key => $links)
+                                @foreach ($links as $link)
+                                        @if ($key == 'Finance')
+                                        <div class="menu-item px-3">
+                                            <a href="{{$link['url']}}" class="menu-link px-3">{{$link['title']}}</a>
+                                        </div>
+                                        @endif
+                                @endforeach
                             @endforeach
+                        @endforeach
                             
                         </div>
                         <!--end::Menu 3-->

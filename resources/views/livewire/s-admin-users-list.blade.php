@@ -51,9 +51,9 @@
                         <div class="mb-10">
                             <label class="form-label fs-6 fw-semibold">Role:</label>
                             <select class="form-select form-select-solid fw-bold " wire:model="role">
-                                <option value="adm_admin">Super Admin</option>
-                                <option value="creator">Creator</option>
-                                <option value="brand">Brand</option>
+                                @foreach(Spatie\Permission\Models\Role::all() as $role)
+                                    <option value="{{ $role->name }}">{{ ucwords($role->name) }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <!--end::Input group-->
@@ -103,7 +103,7 @@
                 <!--begin::Card body-->
                 <div class="card-body d-flex flex-center flex-column py-9 px-5">
                     <!--begin::Avatar-->
-                    <div class="symbol symbol-65px symbol-circle mb-5">
+                    <div class="symbol symbol-50 symbol-circle mb-5">
                         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                         {{-- {{dd($this->user->profile_photo_url)}} --}}
                                     <img  src="{{ $user->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
@@ -126,11 +126,11 @@
                     <a href="{{route('user.profile.show', $user->id)}}" class="fs-4 text-gray-800 text-hover-primary fw-bold mb-0">{{$user->name}}</a>
                     <!--end::Name-->
                     <!--begin::Position-->
-                    @if ($user->role == 'adm_admin')
-                    <div class="fw-semibold text-danger mb-6 bg-light-danger px-2">{{ucwords($user->role)}}</div>
-                    @else
-                    <div class="fw-semibold text-success mb-6 bg-light-success px-2">{{ucwords($user->role)}}</div>
-                    @endif
+                    @if ($user->hasRole('admin'))
+    <div class="fw-semibold text-danger mb-6 bg-light-danger px-2">Admin</div>
+@else
+    <div class="fw-semibold text-success mb-6 bg-light-success px-2">{{ $user->getRoleNames()->first() }}</div>
+@endif
                     
                     
                     <!--end::Position-->
@@ -161,21 +161,21 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->Following</a> --}}
-                            @if ($user->role != 'adm_admin')
-                            <button wire:click="makeAdminConfirm({{$user->id}})" href="#" class="mx-2 btn btn-sm btn-light-danger">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr012.svg-->
+                            @if (!$user->hasRole('admin'))
+                            <button wire:click="makeAdminConfirm({{$user->id}})" class="mx-2 btn btn-sm btn-light-danger">
                                 <span class="svg-icon svg-icon-3">
-                                   {!! getIcon('lock-shield') !!}
+                                    {!! getIcon('lock-shield') !!}
                                 </span>
-                                <!--end::Svg Icon-->Make Admin</button>
-                            @else
-                            <button wire:click="removeAdminConfirm({{$user->id}})" href="#" class="mx-2 btn btn-sm btn-light-info">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr012.svg-->
+                                Make Admin
+                            </button>
+                        @else
+                            <button wire:click="removeAdminConfirm({{$user->id}})" class="mx-2 btn btn-sm btn-light-info">
                                 <span class="svg-icon svg-icon-3">
-                                   {!! getIcon('lock-shield') !!}
+                                    {!! getIcon('lock-shield') !!}
                                 </span>
-                                <!--end::Svg Icon-->Remove Admin</button>
-                            @endif
+                                Remove Admin
+                            </button>
+                        @endif
                            
                     </div>
                     <!--end::Follow-->

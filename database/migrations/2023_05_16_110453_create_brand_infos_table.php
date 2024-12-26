@@ -13,19 +13,18 @@ return new class extends Migration
     {
         Schema::create('brand_infos', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
-            $table->string('inception_date')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('brand_name')->nullable();
             $table->longText('description')->nullable();
-            $table->string('short_desc')->nullable();
             $table->string('position')->nullable();
+            $table->string('banner_path')->nullable();
             $table->string('logo_path')->nullable();
             $table->json('phone_number')->nullable();
-            $table->json('category')->nullable();
             $table->json('brand_email')->nullable();
             $table->text('location')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**

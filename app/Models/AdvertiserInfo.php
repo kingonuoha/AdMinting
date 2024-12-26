@@ -16,6 +16,8 @@ class AdvertiserInfo extends Model
      */
     protected $fillable = [
         'user_id',
+        'gallery',
+        'profile_title',
         'bio',
         'dob',
         'state',
@@ -36,6 +38,7 @@ class AdvertiserInfo extends Model
      */
     protected $casts = [
         'education' => 'array',
+        'gallery' => 'array',
         'phone_number' => 'array',
     ];
 

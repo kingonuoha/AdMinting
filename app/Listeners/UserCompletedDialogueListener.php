@@ -23,6 +23,19 @@ class UserCompletedDialogueListener
      */
     public function handle(UserCompletedDialogue $event): void
     {
-        Mail::to($event->user->email)->send(new DialogueCompletedMail($event->user));
+        $mail_body = view('mail.dialogue_complete',[
+            'user'=> $event->user
+        ])->render();
+      
+      $mailConfig = [
+       'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
+       'mail_from_name' => env('EMAIL_FROM_NAME'),
+       'mail_recipient_email' => $event->user->email,
+       'mail_recipient_name' => $event->user->name,
+       'mail_subject' => env("APP_NAME").' | '. $event->user->name.' Account Activated',
+       'mail_body' => $mail_body
+      ];
+      sendMail($mailConfig);
+        // Mail::to($event->user->email)->send(new DialogueCompletedMail($event->user));
     }
 }

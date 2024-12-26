@@ -1,0 +1,1 @@
+<img {{ $attributes->merge(['class' => '']) }} src="{{asset('template/assets/media/logos/favicon.ico')}}" alt="logo">

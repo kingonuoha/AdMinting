@@ -12,7 +12,7 @@ class ListingIndex extends Component
 {
     use WithPagination;
     public $search;
-    public $category;
+    public $category, $filter_category;
     protected $paginationTheme = 'bootstrap';
 
     public function render()
@@ -20,20 +20,20 @@ class ListingIndex extends Component
         $listing_count = count(Listing::where('is_active', true)
         ->search(trim($this->search))
         ->get());
-        $listings = Listing::where('is_active', true)
+        $listings = Listing::where(['is_active'=> true, "payment_status" => "paid", 'onboarded_by' =>  null])
         // ->with('categories')
         ->latest()
         ->search(trim($this->search))
-            // ->when($this->category, function($query){
-            //     $query->where('category_slug', $this->category);
+            // ->when($this->filter_category, function($query){
+            //     $query->where('category_slug', $this->filter_category);
             // })
         ->paginate(10);
         // return ($listings);
-        // if (request()->has('category')) {
-        //     $category = request('category');
+        // if (!is_null($this->filter_category)) {
+        //     $category = $this->filter_category;
         //     $listings =  $listings->filter(function($listing) use($category){
-        //             return $listing->categories->contains('category_slug', $category)->paginate(10);
-        //     });
+        //             return $listing->categories->contains('category_slug', $category);
+        //     })->paginate(10);
         // }
         $categories = Categories::orderBy('category_name')->get();
         return view('livewire.listing-index',  [

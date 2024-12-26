@@ -37,6 +37,21 @@ class ListingOnboarded implements ShouldQueue
     public function handle(): void
     {
         // send mail to applicant 
+        $mail_body = view('mail.listing_onboarded_applicant', [
+            'user'=> $this->applicant,
+            'brand' => $this->brand,
+            'listing'=> $this->event->listing
+            ])->render();
+
+        $mailConfig = [
+            'mail_from_email' => env('EMAIL_FROM_ADDRESS'),
+            'mail_from_name' => env('EMAIL_FROM_NAME'),
+            'mail_recipient_email' => $this->applicant->email,
+            'mail_recipient_name' => $this->applicant->name,
+            'mail_subject' => '🎉 Congratulations! Job Offer Accepted! 🎉',
+            'mail_body' => $mail_body
+        ];
+        // sendMail($mailConfig);
         Mail::to($this->applicant->email)->send(new ListingOnboarded_ApplicantMail($this->applicant, $this->event->listing, $this->brand));
     }
 }

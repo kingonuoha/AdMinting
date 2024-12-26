@@ -9,60 +9,83 @@ use Illuminate\Support\Facades\File;
 class SuperAdminController extends Controller
 {
     //
-    public function general_setting(){
+    public function general_setting()
+    {
         return view('ADM_admin.general_settings',   [
             'current_page' => 'General Settings',
-        'bread_action' => [
-            'url' => route('dashboard'),
-            'text' => "Dashboard"
-        ],
+            'bread_action' => [
+                'url' => route('dashboard'),
+                'text' => "Dashboard"
+            ],
         ]);
     }
-    public function users_list(){
+    public function changelog_setting()
+    {
+        return view('ADM_admin.changelog_setting',   [
+            'current_page' => 'Change Log Settings',
+            'bread_action' => [
+                'url' => route('dashboard'),
+                'text' => "Dashboard"
+            ],
+        ]);
+    }
+    public function users_list()
+    {
         return view('ADM_admin.users_list',   [
             'current_page' => 'Users List',
-        'bread_action' => [
-            'url' => route('dashboard'),
-            'text' => "Dashboard"
-        ],
+            'bread_action' => [
+                'url' => route('dashboard'),
+                'text' => "Dashboard"
+            ],
         ]);
     }
 
-    public function payroll (Request $req){
+    public function payroll(Request $req)
+    {
         return view('ADM_admin.payroll_view',   [
             'current_page' => 'Total Payroll',
-        'bread_action' => [
-            'url' => route('dashboard'),
-            'text' => "Dashboard"
-        ],
+            'bread_action' => [
+                'url' => route('dashboard'),
+                'text' => "Dashboard"
+            ],
         ]);
-    
+    }
+
+    public function listing_disputes(Request $req)
+    {
+        return view('ADM_admin.listing_disputes',   [
+            'current_page' => 'Listing Disputes',
+            'bread_action' => [
+                'url' => route('dashboard'),
+                'text' => "Dashboard"
+            ],
+        ]);
     }
 
 
-    public function update_app_logo(Request $req){
+    public function update_app_logo(Request $req)
+    {
         $former_logo = AppSettings::find(1);
         $path = 'storage/app_logo';
         $file = $req->file('file');
-        $oldPicture =$former_logo->app_logo;
-        $file_path = $path.$oldPicture;
-        $new_picture_name = 'ADM_LOGO_'.$former_logo->id.time().rand(1, 100000).'.'.$file->extension();
+        $oldPicture = $former_logo->app_logo;
+        $file_path = $path . $oldPicture;
+        $new_picture_name = 'ADM_LOGO_' . $former_logo->id . time() . rand(1, 100000) . '.' . $file->extension();
 
-        if($oldPicture != null && File::exists(public_path($file_path))){
+        if ($oldPicture != null && File::exists(public_path($file_path))) {
             File::delete(public_path($file_path));
             $former_logo->update([
                 'app_logo' => null,
             ]);
         }
         $upload = $file->move(public_path($path), $new_picture_name);
-        if($upload){
+        if ($upload) {
             $former_logo->update([
-                'app_logo' => 'app_logo/'.$new_picture_name,
+                'app_logo' => 'app_logo/' . $new_picture_name,
             ]);
             return response()->json(['status' => 1, 'msg' => "Your Profile Picture has been successfully Updated!!"]);
-        }else{
+        } else {
             return response()->json(['status' => 0, "Something Went Wrong!!"]);
-
         }
     }
 }

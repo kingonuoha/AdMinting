@@ -1,6 +1,6 @@
 @extends('layouts.ADM-auth')
 @section('title')
-    AdMinting | Login
+    {{env("app_name")}} | Login
 @endsection
 @section('content')
 <!--begin::Body-->
@@ -27,7 +27,7 @@
                     <!--begin::Col-->
                     <div class="col-md-6">
                         <!--begin::Google link=-->
-                        <a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                        <a href="{{ route('google.redirect', ['is_authenticating' => true]) }}" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
                         <img alt="Logo" src="{{asset('users/assets/media/svg/brand-logos/google-icon.svg')}}" class="h-15px me-3" />Sign in with Google</a>
                         <!--end::Google link=-->
                     </div>

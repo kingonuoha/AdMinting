@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\Facades\Socialite;
 
 return [
 
@@ -170,6 +171,11 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
+        // \Laravel\Socialite\Facades\Socialite::class
+        App\Providers\FacebookServiceProvider::class,
+        App\Providers\GoogleService::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ])->toArray(),
 
     /*

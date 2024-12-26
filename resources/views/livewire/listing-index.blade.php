@@ -1,184 +1,172 @@
 <div>
-    <div class="mb-12">
-        <div class="d-flex justify-content-center ">
-            @foreach ($categories as $category)
-                <a href="{{route('listing.index', ['category'=> $category->category_slug])}}" class=" {{($category->category_slug == request()->get('category')) ? 'bg-primary text-white' : 'link-primary'}} d-inline mt-2 text xs font-md px-2 py-1 mx-2 border border-gray-500 border-dotted">{{$category->category_name}}</a>
-            @endforeach
-        </div>
-    </div>
-
-    <div class="card mb-5 mb-xl-10">
-        <!--begin::Card header-->
-        <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_connected_accounts" aria-expanded="true" aria-controls="kt_account_connected_accounts">
-            <div class="card-title m-0">
-                <h3 class="fw-bold m-0">All Listings ({{$listing_count}})</h3>
-            </div>
-        </div>
-        <!--end::Card header-->
-        <!--begin::Content-->
-        <div id="kt_account_settings_connected_accounts" class="collapse show">
-            <!--begin::Card body-->
-            <div class="card card-flush" data-select2-id="select2-data-125-5wrc">
-                <!--begin::Card header-->
-                <div class="card-header align-items-center py-5 gap-2 gap-md-5" data-select2-id="select2-data-124-cse6">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                        <!--begin::Search-->
-                        <div class="d-flex align-items-center position-relative my-1">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                            <span class="svg-icon svg-icon-1 position-absolute ms-4">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
-                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"></path>
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                            <input type="text" class="form-control form-control-solid w-250px ps-14" wire:model="search" placeholder="Search Listings">
+    <div class="mb-10 row g-6 g-xl-9">
+        @forelse ($listings as $listing)
+            <!--begin::Col-->
+            <div class="col-md-6 col-lg-4">
+                <!--begin::Card-->
+                <div class="card border-hover-primary">
+                    <!--begin::Card header-->
+                    <div class="card-header border-0 pt-9">
+                        <!--begin::Card Title-->
+                        <div class="card-title m-0">
+                            <!--begin::Avatar-->
+                            <div class="symbol symbol-50px w-50px bg-light">
+                                <img src="{{ asset('storage/' . $listing->user->brandInfos->logo_path) }}"
+                                    alt="{{ $listing->user->brandInfos->brand_name }} logo" class="p-3">
+                            </div>
+                            <!--end::Avatar-->
                         </div>
-                        <!--end::Search-->
+                        <!--end::Car Title-->
+                        <!--begin::Card toolbar-->
+                        <div class="card-toolbar">
+                            @if (is_null($listing->onboarded_by) && is_null($listing->completed_on))
+                                <span class="badge badge-light-primary fw-bold me-auto px-4 py-3">Awaiting
+                                    Onboarding</span>
+                            @elseif(!is_null($listing->onboarded_by) && is_null($listing->completed_on))
+                                <span class="badge badge-light-info fw-bold me-auto px-4 py-3">In Progress</span>
+                            @elseif($listing->payment_status === 'pending')
+                                <span class="badge badge-light-danger fw-bold me-auto px-4 py-3">Awaiting Payment</span>
+                            @else
+                                <span class="badge badge-light-success fw-bold me-auto px-4 py-3">Completed</span>
+                            @endif
+                            <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end"
+                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                data-kt-menu-overflow="true">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen023.svg-->
+                                <span class="svg-icon svg-icon-1 svg-icon-gray-300 me-n1">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="4"
+                                            fill="currentColor"></rect>
+                                        <rect x="11" y="11" width="2.6" height="2.6" rx="1.3"
+                                            fill="currentColor"></rect>
+                                        <rect x="15" y="11" width="2.6" height="2.6" rx="1.3"
+                                            fill="currentColor"></rect>
+                                        <rect x="7" y="11" width="2.6" height="2.6" rx="1.3"
+                                            fill="currentColor"></rect>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </button>
+
+                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px"
+                                data-kt-menu="true" style="">
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <div class="menu-content fs-6 text-dark fw-bold px-3 py-4">Quick Actions</div>
+                                </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu separator-->
+                                <div class="separator mb-3 opacity-75"></div>
+                                <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="{{ route('listings.show', $listing->slug) }}"
+                                        class="menu-link px-3">Apply</a>
+                                </div>
+                                <!--end::Menu item-->
+                            </div>
+                        </div>
+                        <!--end::Card toolbar-->
                     </div>
-                    <!--end::Card title-->
-                    <!--begin::Card toolbar-->
-                    <div class="card-toolbar flex-row-fluid justify-content-end gap-5" data-select2-id="select2-data-123-c59m">
-                        {{-- <div class="w-100 mw-150px" data-select2-id="select2-data-122-1oju">
-                            <!--begin::Select2-->
-                            <select class="form-select form-select-solid" wire:model="category" >
-                                <option>Choose Category</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{$category->category_slug}}">{{ucwords($category->category_name)}}</option>
-                                @endforeach
-                            </select>
-                            
-                            <!--end::Select2-->
-                        </div> --}}
-                        <!--begin::Add product-->
-                        <a href="add-product.html" class="btn btn-primary">Add Product</a>
-                        <!--end::Add product-->
-                    </div>
-                    <!--end::Card toolbar-->
-                </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card-body pt-0">
-                    <!--begin::Table-->
-                    <div id="kt_ecommerce_products_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer"><div class="table-responsive"><table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="listings_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0"><th class="w-10px pe-2 sorting_disabled" rowspan="1" colspan="1" aria-label="
-                                    
-                                        
-                                    
-                                " style="width: 29.8906px;">
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                        <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#listings_table .form-check-input" value="1">
-                                    </div>
-                                </th>
-                                <th class="min-w-200px sorting" tabindex="0" aria-controls="listings_table" rowspan="1" colspan="2" aria-label="Product: activate to sort column ascending" >Product</th>
-                                {{-- <th class="text-end min-w-100px sorting" tabindex="0" aria-controls="listings_table" rowspan="1" colspan="1" aria-label="SKU: activate to sort column ascending" >SKU</th> --}}
-                                <th class="text-end min-w-100px sorting" tabindex="0" aria-controls="listings_table" rowspan="1" colspan="1" aria-label="Price: activate to sort column ascending" >Category</th>
-                                <th class="text-end min-w-100px sorting" tabindex="0" aria-controls="listings_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" >No. Applications</th>
-                                <th class="text-end min-w-70px sorting_disabled" rowspan="1" colspan="1" aria-label="Actions" style="width: 99.7031px;">Actions</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-semibold text-gray-600">
-                           @foreach ($listings as $listing)
-                     
-                        <tr class="odd">
-                                <!--begin::Checkbox-->
-                                <td>
-                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="1">
-                                    </div>
-                                </td>
-                                <!--end::Checkbox-->
-                                <!--begin::Category=-->
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <!--begin::Thumbnail-->
-                                        <a href="{{route('listings.show', $listing->slug)}}" class="symbol symbol-50px">
-                                            <span class="symbol-label" style="background-image:url({{asset('storage/company_logo/'.$listing->logo)}});"></span>
-                                        </a>
-                                        <!--end::Thumbnail-->
-                                        <div class="ms-5">
-                                            <!--begin::Title-->
-                                            <a href="{{route('listings.show', $listing->slug)}}" class="text-gray-800 text-hover-primary fs-5 fw-bold" data-kt-ecommerce-product-filter="product_name">{{$listing->title}}</a><br>
-                                            <span class="text-primary">{{$listing->company}} &mdash; <span class="text-muted">{{$listing->location}}</span></span>
-                                            <!--end::Title-->
-                                        </div>
-                                    </div>
-                                </td>
-                                <!--end::Category=-->
-                              
-                                <!--begin::Qty=-->
-                                <td class="text-end pe-0" data-order="28">
-                                    <span class="fw-bold ms-3">{{$listing->created_at->diffForHumans()}}</span>
-                                </td>
-                                <!--end::Qty=-->
-                                <!--begin::Price=-->
-                                <td class="text-end pe-0">
-                                    @foreach ($listing->categories as $category)
-                                    <a href="{{route('listing.index', ['category'=> $category->category_slug])}}" class=" {{($category->category_slug == request()->get('category')) ? 'bg-primary text-white' : 'link-primary'}} mt-2 text xs font-md px-2 py-1 mx-1 border border-gray-500 border-dotted">{{$category->category_name}}</a>
+                    <!--end:: Card header-->
+                    <!--begin:: Card body-->
+                    <div class="card-body p-9">
+                        <!--begin::Name-->
+                        <a href="{{ !is_null($listing->onboarded_by) ? route('listing.dashboard', $listing->slug) : route('listings.show', $listing->slug) }}"
+                            class="fs-3 fw-bold text-dark">{{ $listing->title }}</a>
+                        <!--end::Name-->
+                        <!--begin::Description-->
+                        <p class="text-gray-400 fw-semibold fs-5 mt-1 mb-7">
+                            {{ substr(strip_tags($listing->content), 0, rand(80, 95)) }}...</p>
+                        <!--end::Description-->
+                        <!--begin::Info-->
+                        <div class="row mb-5">
+                            <!--begin::Due-->
+                            <div
+                                class="col-12 col-md col-lg col-xl border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
+                                <div class="fs-6 text-gray-800 fw-bold">
+                                    {{ $listing->due_date == null ? $listing->no_of_days . ' days after onboarding' : $listing->due_date }}
+                                </div>
+                                <div class="fw-semibold text-gray-400">Due Date</div>
+                            </div>
+                            <!--end::Due-->
+                            <!--begin::Budget-->
+                            <div
+                                class="col-12 col-md col-lg col-xl border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
+                                <div class="fs-6 text-gray-800 fw-bold">NGN{{ formatMoney($listing->price) }}</div>
+                                <div class="fw-semibold text-gray-400">Budget</div>
+                            </div>
+                            <!--end::Budget-->
+                        </div>
+                        <!--end::Info-->
+                        <div class="separator mb-3 opacity-75"></div>
+
+                        <div class="row">
+                            <div class="col">
+                                @if (count($listing->clicks) > 0 || $listing->onboarded_by !== null)
+                                    <!--begin::Users-->
+                                    <div class="symbol-group symbol-hover">
+                                        <!--begin::User-->
+                                        @foreach ($listing->clicks as $click)
+                                            <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                                aria-label="{{ $click->user->name }}" data-kt-initialized="1">
+                                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                                                    {{-- {{dd($this->user->profile_photo_url)}} --}}
+                                                    <img src="{{ $click->user->profile_photo_url }}"
+                                                        alt="{{ $click->user->name }}" />
+                                                @else
+                                                    <span
+                                                        class="symbol-label bg-primary text-inverse-primary fw-bold">{{ strtoupper(substr($click->user->name, 0, 1)) }}</span>
+                                                @endif
+                                            </div>
+                                            @if ($loop->iteration === 3)
+                                            @break
+                                        @endif
                                     @endforeach
-                                </td>
-                                <!--end::Price=-->
-                               
-                                <!--begin::Status=-->
-                                <td class="text-end pe-0" data-order="Inactive">
-                                    <!--begin::Badges-->
-                                    <div class="badge badge-light-success">{{$listing->clicks()->count()}}</div>
-                                    <!--end::Badges-->
-                                </td>
-                                <!--end::Status=-->
-                                <!--begin::Action=-->
-                                
-                                <td class="text-end">
-                                   
-                                    <a  href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions 
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                        <span class="svg-icon svg-icon-5 m-0">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon--></a>
-                                        <!--begin::Menu-->
-                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="{{route('listings.show', $listing->slug)}}" class="menu-link px-3">Apply</a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="#" class="menu-link px-3" data-kt-ecommerce-product-filter="delete_row">Delete</a>
-                                            </div>
-                                            <!--end::Menu item-->
+                                    <!--end::Users-->
+                                    <a wire:click.prevent="showAppliedUsers({{ $listing->id }})" href="#"
+                                        class="symbol symbol-35px symbol-circle" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_view_users">
+                                        <span class="symbol-label bg-dark text-inverse-dark fs-8 fw-bold"
+                                            data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                            data-kt-initialized="1">+{{ count($listing->clicks) - 3 < 1 ? 'More' : count($listing->clicks) - 3 }}</span>
+                                    </a>
+                                </div>
+                            @else
+                                <span class="text-info">No Applications Yet</span>
+                            @endif
+                        </div>
+                        <div class="col">
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
+                                <div class="fs-6 text-gray-800 fw-bold">
+                                    @if (!is_null($listing->required_social))
+                                    <div class="symbol-group symbol-hover mb-3">
+                                        
+                                        @foreach ($listing->required_social as $social)
+                                             <!--begin::User-->
+                                        <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" aria-label="{{$social}}" data-kt-initialized="1">
+                                            <img alt="{{$social}}" src="{{asset('users/assets/media/svg/brand-logos/'.$social.'.svg')}}">
                                         </div>
-                                        <!--end::Menu--> 
-                                </td>
-                                <!--end::Action=-->
-                            </tr>
-                            <!--end::Table row-->
-                           @endforeach
-                            
-                        </tbody>
-                        <!--end::Table body-->
-                    </table></div>
+                                        <!--end::User-->
+                                        @endforeach
+                                    </div>
+                                    @else
+                                        <span class="text-info">No Specified Socials</span>
+                                    @endif
+                                </div>
+                                <div class="fw-semibold text-gray-400">Required Socials</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                    <!--end::Table-->
-                </div>
-                <!--end::Card body-->
+                <!--end:: Card body-->
             </div>
-            <!--begin::Card footer-->
-            <div class="card-footer d-flex justify-content-end py-6 px-9">
-               {{$listings->links()}}
-            </div>
-            <!--end::Card footer-->
+            <!--end::Card-->
         </div>
-        <!--end::Content-->
-    </div>
+    @empty
+        <span class="text-danger bg-light-danger px-5 py-2 fs-6">No Listing For now</span>
+    @endforelse
+</div>
+
 </div>

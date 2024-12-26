@@ -40,7 +40,7 @@
             </div>
             <!--end::Input group-->
             <!--begin::Input group-->
-          @if ($user->role == 'brand')
+          @if ($user->getRoleNames()->first() == 'brand')
                 <div class="row mb-7">
                     <!--begin::Label-->
                     <label class="col-lg-4 fw-semibold text-muted">Company</label>

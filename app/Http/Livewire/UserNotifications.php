@@ -24,6 +24,7 @@ class UserNotifications extends Component
                 'message'=> "Notification deleted successfully",
                 'type'=> 'success'
             ]);
+            createLog("you deleted a notification", getIcon('bin'), 'danger');
 
 
     }
@@ -33,12 +34,14 @@ class UserNotifications extends Component
         'message' => 'Delete all notifications? This action cannot be undone. Proceed?',
         'type' => 'warning'
         ]);
-}
+        
+    }
     public function notificationDeleteConfirmed(){
         $this->user->notifications()->delete();
         $this->dispatchBrowserEvent('success_alert', [
-        'message' => 'All notifications have been successfully deleted.',
+            'message' => 'All notifications have been successfully deleted.',
         ]);
+        createLog("you deleted all your notifications", getIcon('bin'), 'danger');
 }
     public function markAllAsRead(){
         $this->user->unreadNotifications->markAsRead();
@@ -46,6 +49,8 @@ class UserNotifications extends Component
             'message' => 'All notifications has been marked as read',
             'type' => 'info'
         ]);
+        createLog("you marked all your notifications as read", getIcon('layers'), 'info');
+
 }
     public function render()
     {

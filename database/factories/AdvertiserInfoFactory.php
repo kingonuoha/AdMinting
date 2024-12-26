@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AdvertiserInfo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,16 +17,24 @@ class AdvertiserInfoFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            // 'user_id'=> '',
-            'bio'=> $this->faker->sentences(rand(30, 50)),
-            'dob'=> $this->faker->dateTimeBetween('-40 years', '-18 years'),
-            'work_experience'=> 'Many',
-            // 'category'=> '',
-            'education'=> 'FUTO',
-            'phone_number'=> [['number'=> $this->faker->phoneNumber()], ['number'=> $this->faker->phoneNumber()]],
-            'portfolio_url'=> '',
-            'religion'=> "Christian",
-        ];
+        // $users = User::pluck('id')->toArray();
+
+    return [
+        'user_id' => 1,
+        'bio' => $this->faker->paragraph,
+        'dob' => $this->faker->date(),
+        'work_experience' => null,
+        'category' => $this->faker->word,
+        'educational_status' => $this->faker->randomElement(['Bachelors', 'Masters', 'PhD']),
+        'education' => null,
+        'phone_number' => $this->faker->phoneNumber,
+        'portfolio_url' => $this->faker->url,
+        'religion' => $this->faker->randomElement(AdvertiserInfo::$religion),
+        'state' => $this->faker->state,
+        'min_price' => $this->faker->numberBetween(1000, 5000),
+        'max_price' => $this->faker->numberBetween(5000, 10000),
+        'lga_NG' => NULL,
+        // Add more attributes as needed
+    ];
     }
 }

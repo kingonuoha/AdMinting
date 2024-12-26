@@ -8,6 +8,29 @@ use Illuminate\Http\Request;
 class ADM_Helper extends Controller
 {
     //
+    static $categories = [
+        'social_media',
+        'content_creation',
+        'digital_marketing',
+        'influencer_marketing',
+        'brand_strategy',
+        'paid_advertising',
+        'seo_optimization',
+        'email_marketing',
+        'social_analytics',
+        'affiliate_marketing',
+        'video_marketing',
+        'personal_branding',
+        'community_management',
+        'campaign_management',
+        'creative_strategy',
+        'social_trends',
+        'brand_awareness',
+        'customer_engagement',
+        'viral_content',
+        'social_growth',
+    ];
+    
     static $states_list = [
         ['id' => 1,'state' => 'Abia'],
         ['id' => 2,'state' => 'Adamawa'],

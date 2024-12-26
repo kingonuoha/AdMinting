@@ -9,9 +9,9 @@
                     <div class="d-flex align-items-center pe-2 mb-5">
                         <span class="text-muted fw-bold fs-5 flex-grow-1">{{time_Ago($onboardedListing->onboarded_on)}}</span>
                         <div class="symbol symbol-50px">
-                            <span class="symbol-label bg-light">
-                                <img src="{{asset('storage/company_logo/'.$onboardedListing->logo)}}" class="h-50 align-self-center" alt="">
-                            </span>
+                            {{-- <span class="symbol-label bg-light"> --}}
+                                <img src="{{asset('storage/'.$onboardedListing->user->brandInfos->logo_path)}}" class="h-50 align-self-center" alt="">
+                            {{-- </span> --}}
                         </div>
                     </div>
                     <!--end::Info-->

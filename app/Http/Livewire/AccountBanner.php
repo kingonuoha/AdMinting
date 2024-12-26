@@ -20,12 +20,21 @@ class AccountBanner extends Component
         }else{
             $this->user = User::find($this->selected_user_id);
         }
-        // dd($this->user);
-                       
+      
         $this->percent = getPercentNull($this->user->toArray(), ['id',"email_verified_at", "current_team_id", "two_factor_secret", "two_factor_recovery_codes", "two_factor_confirmed_at",  "blocked",'created_at', 'updated_at', 'role', 'stripe_id', "pm_type", "pm_last_four", "trial_ends_at", "dialogue_last_complete", "dialogue_complete"]);
+
     }
     public function render()
     {
-        return view('livewire.account-banner');
+          // dd($this->user);
+          $socialAccounts = $this->user->socialAccounts;
+          $followers = 0;
+          foreach($socialAccounts as $account){
+              $pages = $account->socialPages ?? [];
+              foreach($pages as $page){
+                $followers +=  $page->metrics()->firstWhere("name", "followers")->value ?? 0;
+              }
+          }
+        return view('livewire.account-banner', compact("followers"));
     }
 }

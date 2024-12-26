@@ -3,11 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\Listing;
+use App\Models\User;
 use Livewire\Component;
 
 class BrandDashboard extends Component
 {
-    public $listing_summary, $brand;
+    public $listing_summary, $brand, $featuredCreators;
     public function mount(){
         $totalListing= Listing::all()->where('user_id', auth()->user()->id);
         // getIcon();
@@ -39,6 +40,11 @@ class BrandDashboard extends Component
         ];
 
         $this->brand = auth()->user();
+        $this->fetchFeaturedCreators(12);
+    }
+
+    public function fetchFeaturedCreators($limit = 5){
+       return $this->featuredCreators =  $users =  User::where("rating", "!=", 0)->orderBy('rating', 'desc')->limit($limit)->get();
     }
     public function render()
     {

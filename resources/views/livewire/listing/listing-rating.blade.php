@@ -220,8 +220,8 @@
                 <h2 class="fs-2x fw-bold mb-10">Rate Listing</h2>
                 <!--end::Title-->
                 <!--begin::Description-->
-                <p class="text-gray-400 fs-4 fw-semibold mb-10">There are no customers added yet.
-                <br>Kickstart your CRM by adding a your first customer</p>
+                <p class="text-gray-400 fs-4 fw-semibold mb-10">No Rating Added yet.
+                <br>Kickstart by adding your rating</p>
                 <!--end::Description-->
                 <!--begin::Action-->
                 <a href="#" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#kt_modal_scrollable_2" >Rate Experience</a>

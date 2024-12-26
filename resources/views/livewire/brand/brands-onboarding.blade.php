@@ -7,7 +7,8 @@
                 <div class="d-flex flex-center py-10 py-lg-20 mt-lg-20">
                     <!--begin::Logo-->
                     <a href="index.html">
-                        <img alt="Logo" src="{{asset('users/assets/media/logos/custom-1.png')}}" class="h-70px" />
+                        <x-application-logo-main class="h-70px"/>
+
                     </a>
                     <!--end::Logo-->
                 </div>
@@ -228,7 +229,7 @@
 														<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change avatar" data-kt-initialized="1">
 															<i class="bi bi-pencil-fill fs-7"></i>
 															<!--begin::Inputs-->
-															<input type="file" name="avatar" accept=".png, .jpg, .jpeg">
+															<input id="changeBrandLogo" type="file" name="logo" accept=".png, .jpg, .jpeg">
 															<input type="hidden" name="avatar_remove">
 															<!--end::Inputs-->
 														</label>
@@ -400,9 +401,9 @@
                                                    <div class="stepper-line h-40px"></div>
                                                  <div>
                                                       <!--end::Line-->
-                                                   @if (!is_null($phone_numbers))
+                                                   @if (!is_null($phone_numbers) && is_iterable($phone_numbers))
                                                    @forelse ($phone_numbers as $item)
-                                                   <p class="text-info text-md fs-bold">{{$item['number']}}, </p> 
+                                                   <p class="text-info text-md fs-bold">{{$item}}, </p> 
                                                    @empty
                                                        <div class="text-info">No phone Number Added Yet!</div>
                                                    @endforelse
@@ -525,100 +526,141 @@
                                                     </div>
                                                 </div>
                                                 <!--end::Item-->
-                                                <div class="separator separator-dashed my-5"></div>
-                                                <!--begin::Item-->
-                                                <div class="d-flex flex-stack">
-                                                    <div class="d-flex">
-                                                        <img src="{{asset('users/assets/media/svg/brand-logos/github.svg')}}" class="w-30px me-6" alt="">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="{{route('github.redirect')}}" target="_blank" class="fs-5 text-dark text-hover-primary fw-bold">Github</a>
-                                                            <div class="fs-6 fw-semibold text-gray-400">Keep eye on on your Repositories</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-end">
-                                                        @if ($user['social_github_id'] != null)
-                                                        <button  disabled class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-info">
-                                                            Connected!
-                                                        </button>
-                                                        @else
-                                                        <button  onclick="github_redirect()" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</button>
-                                                         @endif
-
+                                   
+                                                <!--end::Item-->
+                                            <div class="separator separator-dashed my-5"></div>
+                                            <!--begin::Item-->
+                                            <div class="d-flex flex-stack">
+                                                <div class="d-flex">
+                                                    <img src="{{ asset('users/assets/media/svg/brand-logos/instagram-2-1.svg') }}"
+                                                        class="w-30px me-6" alt="">
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#"
+                                                            class="fs-5 text-dark text-hover-primary fw-bold">Instagram</a>
+                                                        <div class="fs-6 fw-semibold text-gray-400">Share Ideas</div>
                                                     </div>
                                                 </div>
-                                                <!--end::Item-->
-                                                <div class="separator separator-dashed my-5"></div>
-                                                <!--begin::Item-->
-                                                <div class="d-flex flex-stack">
-                                                    <div class="d-flex">
-                                                        <img src="{{asset('users/assets/media/svg/brand-logos/instagram-2-1.svg')}}" class="w-30px me-6" alt="">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Instagram</a>
-                                                            <div class="fs-6 fw-semibold text-gray-400">Share Ideas</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-end">
-                                                        
-                                                        <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a>
+                                                <div class="d-flex justify-content-end">
+                                                    @if (!empty($user['social_instagram_profile']))
+                                                        <x-button loading="openInstagramModal"
+                                                            wire:click.prevent="openInstagramModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-info">Change
+                                                            {!! getIcon('pencil') !!}</x-button>
+                                                        <a href="{{ $user['social_instagram_profile'] }}"
+                                                            target="_blank" type="button"
+                                                            class="mx-2 btn btn-outline bg-light-info btn-outline-info btn-active-light-info">Test
+                                                            {!! getIcon('rocket') !!}</a>
+                                                    @else
+                                                        <x-button loading="openInstagramModal"
+                                                            wire:click.prevent="openInstagramModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</x-button>
+                                                    @endif
 
+
+                                                    {{-- <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a> --}}
+
+                                                </div>
+                                            </div>
+                                            <!--end::Item-->
+                                            <div class="separator separator-dashed my-5"></div>
+                                            <!--begin::Item-->
+                                            <div class="d-flex flex-stack">
+                                                <div class="d-flex">
+                                                    <img src="{{ asset('users/assets/media/svg/brand-logos/facebook-4.svg') }}"
+                                                        class="w-30px me-6" alt="">
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#"
+                                                            class="fs-5 text-dark text-hover-primary fw-bold">Facebook</a>
+                                                        <div class="fs-6 fw-semibold text-gray-400">Connect with
+                                                            Friends and Clients</div>
                                                     </div>
                                                 </div>
-                                                <!--end::Item-->
-                                                <div class="separator separator-dashed my-5"></div>
-                                                <!--begin::Item-->
-                                                <div class="d-flex flex-stack">
-                                                    <div class="d-flex">
-                                                        <img src="{{asset('users/assets/media/svg/brand-logos/facebook-4.svg')}}" class="w-30px me-6" alt="">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Facebook</a>
-                                                            <div class="fs-6 fw-semibold text-gray-400">Connect with Friends and Clients</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-end">
-                                                        <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a>
+                                                <div class="d-flex justify-content-end">
+                                                    @if (!empty($user['social_facebook_profile']))
+                                                        <x-button loading="openFacebookModal"
+                                                            wire:click.prevent="openFacebookModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-info">Change
+                                                            {!! getIcon('pencil') !!}</x-button>
+                                                        <a href="{{ $user['social_facebook_profile'] }}"
+                                                            target="_blank" type="button"
+                                                            class="mx-2 btn btn-outline bg-light-info btn-outline-info btn-active-light-info">Test
+                                                            {!! getIcon('rocket') !!}</a>
+                                                    @else
+                                                        <x-button loading="openFacebookModal"
+                                                            wire:click.prevent="openFacebookModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</x-button>
+                                                    @endif
+                                                    {{-- <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a> --}}
 
+                                                </div>
+                                            </div>
+                                            <!--end::Item-->
+                                            <div class="separator separator-dashed my-5"></div>
+                                            <!--begin::Item-->
+                                            <div class="d-flex flex-stack">
+                                                <div class="d-flex">
+                                                    <img src="{{ asset('users/assets/media/svg/brand-logos/twitter.svg') }}"
+                                                        class="w-30px me-6" alt="">
+                                                    <div class="d-flex flex-column">
+                                                        <a href="#"
+                                                            class="fs-5 text-dark text-hover-primary fw-bold">Twitter</a>
+                                                        <div class="fs-6 fw-semibold text-gray-400">Integrate Projects
+                                                            Discussions</div>
                                                     </div>
                                                 </div>
-                                                <!--end::Item-->
-                                                <div class="separator separator-dashed my-5"></div>
-                                                <!--begin::Item-->
-                                                <div class="d-flex flex-stack">
-                                                    <div class="d-flex">
-                                                        <img src="{{asset('users/assets/media/svg/brand-logos/twitter.svg')}}" class="w-30px me-6" alt="">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Twitter</a>
-                                                            <div class="fs-6 fw-semibold text-gray-400">Integrate Projects Discussions</div>
+                                                <div class="d-flex justify-content-end">
+                                                    @if (!empty($user['social_twitter_profile']))
+                                                        <x-button loading="openTwitterModal"
+                                                            wire:click.prevent="openTwitterModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-info">Change
+                                                            {!! getIcon('pencil') !!}</x-button>
+                                                        <a href="{{ $user['social_twitter_profile'] }}"
+                                                            target="_blank" type="button"
+                                                            class="mx-2 btn btn-outline bg-light-info btn-outline-info btn-active-light-info">Test
+                                                            {!! getIcon('rocket') !!}</a>
+                                                    @else
+                                                        <x-button loading="openTwitterModal"
+                                                            wire:click.prevent="openTwitterModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</x-button>
+                                                    @endif
+                                                    {{-- <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a> --}}
+
+                                                </div>
+                                            </div>
+                                            <!--end::Item-->
+                                            <!--end::Item-->
+                                            <div class="separator separator-dashed my-5"></div>
+                                            <!--begin::Item-->
+                                            <div class="d-flex flex-stack">
+                                                <div class="d-flex">
+                                                    <img src="{{ asset('users/assets/media/svg/brand-logos/linkedin-1.svg') }}"
+                                                        class="w-30px me-6" alt="">
+                                                    <div class="d-flex flex-column">
+                                                        <a href="{{ route('linkedin.redirect') }}" target="_blank"
+                                                            class="fs-5 text-dark text-hover-primary fw-bold">LinkedIn</a>
+                                                        <div class="fs-6 fw-semibold text-gray-400">Lets Talk business
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex justify-content-end">
-                                                        <a href="#" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</a>
-
-                                                    </div>
                                                 </div>
-                                                <!--end::Item-->
-                                                <!--end::Item-->
-                                                <div class="separator separator-dashed my-5"></div>
-                                                <!--begin::Item-->
-                                                <div class="d-flex flex-stack">
-                                                    <div class="d-flex">
-                                                        <img src="{{asset('users/assets/media/svg/brand-logos/linkedin-1.svg')}}" class="w-30px me-6" alt="">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="{{route('linkedin.redirect')}}" target="_blank" class="fs-5 text-dark text-hover-primary fw-bold">LinkedIn</a>
-                                                            <div class="fs-6 fw-semibold text-gray-400">Lets Talk business</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-end">
-                                                        @if ($user['social_linkedin_id'] != null)
-                                                        <button  disabled class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-info">
-                                                            Connected!
-                                                        </button>
-                                                        @else
-                                                        <button  onclick="linkedin_redirect()" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</button>
-                                                         @endif
+                                                <div class="d-flex justify-content-end">
+                                                    @if (!empty($user['social_linkedin_profile']))
+                                                        <x-button loading="openLinkedinModal"
+                                                            wire:click.prevent="openLinkedinModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-success btn-active-light-success">Change
+                                                            {!! getIcon('pencil') !!}</x-button>
+                                                        <a href="{{ $user['social_linkedin_profile'] }}"
+                                                            target="_blank" type="button"
+                                                            class="mx-2 btn btn-outline bg-light-info btn-outline-info btn-active-light-info">Test
+                                                            {!! getIcon('rocket') !!}</a>
+                                                    @else
+                                                        <x-button loading="openLinkedinModal"
+                                                            wire:click.prevent="openLinkedinModal" type="button"
+                                                            class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info">Connect</x-button>
+                                                    @endif
 
-                                                    </div>
                                                 </div>
-                                                <!--end::Item-->
+                                            </div>
+                                            <!--end::Item-->
                                             </div>
                                             <!--end::Items-->
                                         </div>
@@ -746,9 +788,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-end flex-column">
                                                         <button type="button" class="mb-1 btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info" wire:click="showAddNumber()">Add new</button>
-                                                       @if (!is_null($phone_numbers))
+                                                       @if (!is_null($phone_numbers) && is_iterable($phone_numbers))
                                                        @forelse ($phone_numbers as $item)
-                                                       <p class="text-success text-md fs-bold">{{$item['number']}}</p>
+                                                       <p class="text-success text-md fs-bold">{{$item}}</p>
                                                            
                                                        @empty
                                                            <div class="text-info">No phone Number Added Yet!</div>
@@ -830,7 +872,7 @@
                                                 <!--end::Title-->
                                                 <!--begin::Action-->
                                                 <div class="text-center">
-                                                    <a href="{{route('dashboard')}}" class="btn btn-sm btn-dark fw-bold" data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">Go To Dash</a>
+                                                    <a href="{{route('dashboard')}}" class="btn btn-sm btn-dark fw-bold" >Go To Dash</a>
                                                 </div>
                                                 <!--begin::Action-->
                                             </div>
@@ -1031,7 +1073,306 @@
                 </div>
             </div>
         </div>
+
+        <div wire:ignore.self class="modal fade" tabindex="-1" id="InstagramModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Your Instagram Profile Link</h3>
+
+                        {{-- <span class="text-muted">
+                            Go to your Instagram profile, click on the three horizontal lines in the top right corner, select 'Settings,' and then 'Account.' You'll find your profile link there.
+                        </span> --}}
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <form wire:submit.prevent="saveInstagram" id="institutionForm">
+                        <div class="modal-body">
+                            <div
+                                class="notice d-flex bg-light-info rounded border-info border border-dashed mb-12 p-6">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+                                <span class="svg-icon svg-icon-2tx svg-icon-info me-4">
+                                    {!! getIcon('rocket') !!}
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <!--begin::Content-->
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">How to get Your Link</h4>
+                                        <div class="fs-6 text-gray-700">Go to your Instagram profile, click on the
+                                            three horizontal lines in the top right corner, select 'Settings,' and then
+                                            'Account.' You'll find your profile link there. Take me to
+                                            <a href="#" class="fw-bold" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_new_card">Instagram</a>.
+                                        </div>
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 mb-3">
+                                    <!--begin::Label-->
+                                    <label class="form-label mb-3">Enter Your Instagram Profile Link</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+
+                                    <input class="form-control" type="tel" wire:model="instagram_profile">
+                                    <span class="text-danger">
+                                        @error('instagram_profile')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                    <!--end::Input-->
+                                </div>
+
+                            </div>
+                            @if (session()->has('success'))
+                                <span class="text-success">{{ session('success') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <x-button loading="saveInstagram">Add</x-button>
+                            {{-- <button type="submit"   class="ml-3 hover-rotate-end btn btn-active-success  ">Add</button> --}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div wire:ignore.self class="modal fade" tabindex="-1" id="FacebookModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Facebook Profiler</h3>
+
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <form wire:submit.prevent="saveFacebook" id="institutionForm">
+                        <div class="modal-body">
+                            <div
+                                class="notice d-flex bg-light-info rounded border-info border border-dashed mb-12 p-6">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+                                <span class="svg-icon svg-icon-2tx svg-icon-info me-4">
+                                    {!! getIcon('rocket') !!}
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <!--begin::Content-->
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">How to get Your Link</h4>
+                                        <div class="fs-6 text-gray-700"> Visit your Facebook profile, click on your
+                                            name at the top, and copy the URL from your browser's address bar. Take me
+                                            to
+                                            <a href="#" class="fw-bold" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_new_card">Facebook</a>.
+                                        </div>
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 mb-3">
+                                    <!--begin::Label-->
+                                    <label class="form-label mb-3">Enter Facebook Profile Link</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+
+                                    <input class="form-control" type="url" wire:model="facebook_profile">
+                                    <span class="text-danger">
+                                        @error('facebook_profile')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                    <!--end::Input-->
+                                </div>
+
+                            </div>
+                            @if (session()->has('success'))
+                                <span class="text-success">{{ session('success') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <x-button loading="saveFacebook">Add</x-button>
+                            {{-- <button type="submit"   class="ml-3 hover-rotate-end btn btn-active-success  ">Add</button> --}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div wire:ignore.self class="modal fade" tabindex="-1" id="TwitterModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Twitter Profile</h3>
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <form wire:submit.prevent="saveTwitter" id="institutionForm">
+                        <div class="modal-body">
+                            <div
+                                class="notice d-flex bg-light-info rounded border-info border border-dashed mb-12 p-6">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+                                <span class="svg-icon svg-icon-2tx svg-icon-info me-4">
+                                    {!! getIcon('rocket') !!}
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <!--begin::Content-->
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">How to get Your Link</h4>
+                                        <div class="fs-6 text-gray-700"> Visit your Facebook profile, click on your
+                                            name at the top, and copy the URL from your browser's address bar. Take me
+                                            to
+                                            <a href="#" class="fw-bold" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_new_card">Facebook</a>.
+                                        </div>
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 mb-3">
+                                    <!--begin::Label-->
+                                    <label class="form-label mb-3">Enter Twitter Profile</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+
+                                    <input class="form-control" type="tel" wire:model="twitter_profile">
+                                    <span class="text-danger">
+                                        @error('twitter_profile')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                    <!--end::Input-->
+                                </div>
+
+                            </div>
+                            @if (session()->has('success'))
+                                <span class="text-success">{{ session('success') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <x-button loading="saveTwitter">Add</x-button>
+                            {{-- <button type="submit"   class="ml-3 hover-rotate-end btn btn-active-success  ">Add</button> --}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div wire:ignore.self class="modal fade" tabindex="-1" id="LinkedinModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Linkedin Profile</h3>
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <form wire:submit.prevent="saveLinkedin" id="institutionForm">
+                        <div class="modal-body">
+                            <div
+                                class="notice d-flex bg-light-info rounded border-info border border-dashed mb-12 p-6">
+                                <!--begin::Icon-->
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen044.svg-->
+                                <span class="svg-icon svg-icon-2tx svg-icon-info me-4">
+                                    {!! getIcon('rocket') !!}
+                                </span>
+                                <!--end::Svg Icon-->
+                                <!--end::Icon-->
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <!--begin::Content-->
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">How to get Your Link</h4>
+                                        <div class="fs-6 text-gray-700"> Log in to LinkedIn, click on your profile
+                                            picture, and select 'View Profile.' Then, copy the URL from your browser..
+                                            Take me to
+                                            <a href="#" class="fw-bold" data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_new_card">LinkedIn</a>.
+                                        </div>
+                                    </div>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 mb-3">
+                                    <!--begin::Label-->
+                                    <label class="form-label mb-3">Enter Linkedin Profile</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+
+                                    <input class="form-control" type="tel" wire:model="linkedin_profile">
+                                    <span class="text-danger">
+                                        @error('linkedin_profile')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                    <!--end::Input-->
+                                </div>
+
+                            </div>
+                            @if (session()->has('success'))
+                                <span class="text-success">{{ session('success') }}</span>
+                            @endif
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <x-button loading="saveLinkedin">Add</x-button>
+                            {{-- <button type="submit"   class="ml-3 hover-rotate-end btn btn-active-success  ">Add</button> --}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
 @push('select2Script')
     <script defer>
       
@@ -1084,8 +1425,72 @@
                 toastr.warning(e.detail.message, "Warning!");
             }
 
-    
+            $('#changeBrandBanner').ijaboCropTool({
+                preview: '.image-input-placeholder',
+                setRatio: 16 / 9,
+                allowedExtensions: ['jpg', 'jpeg', 'png'],
+                buttonsText: ['CROP', 'QUIT'],
+                buttonsColor: ['#30bf7d', '#ee5155', -15],
+                processUrl: '{{ route('account.brand.banner') }}',
+                withCSRF: ['_token', '{{ csrf_token() }}'],
+                onSuccess: function(message, element, status) {
+                    // alert(message);
+                    Livewire.emit('refreshComponent');
+                    success_alert(message)
+                },
+                onError: function(message, element, status) {
+                    error_alert('Couldnt Change Profile Picture : Error:-' + message)
+                }
+            });
+
+
+
+            $('#changeBrandLogo').ijaboCropTool({
+                preview: '.image-input-placeholder',
+                setRatio: 1,
+                allowedExtensions: ['jpg', 'jpeg', 'png'],
+                buttonsText: ['CROP', 'QUIT'],
+                buttonsColor: ['#30bf7d', '#ee5155', -15],
+                processUrl: '{{ route('account.brand.logoUpdate') }}',
+                withCSRF: ['_token', '{{ csrf_token() }}'],
+                onSuccess: function(message, element, status) {
+                    // alert(message);
+                    Livewire.emit('refreshComponent');
+                    success_alert(message)
+                },
+                onError: function(message, element, status) {
+                    error_alert('Couldnt Change Profile Picture : Error:-' + message)
+                }
+            });
+
+            
+            window.addEventListener('social:Instagram', () => {
+                $("#InstagramModal").modal('show')
+            });
+            window.addEventListener('social:Facebook', () => {
+                $("#FacebookModal").modal('show')
+            });
+            window.addEventListener('social:Twitter', () => {
+                $("#TwitterModal").modal('show')
+            });
+            window.addEventListener('social:Linkedin', () => {
+                $("#LinkedinModal").modal('show')
+            });
+
+            //  close modals 
+            window.addEventListener('social:InstagramClose', () => {
+                $("#InstagramModal").modal('hide')
+            });
+            window.addEventListener('social:FacebookClose', () => {
+                $("#FacebookModal").modal('hide')
+            });
+            window.addEventListener('social:TwitterClose', () => {
+                $("#TwitterModal").modal('hide')
+            });
+            window.addEventListener('social:LinkedinClose', () => {
+                $("#LinkedinModal").modal('hide')
+            });
     </script>
 @endpush
-   
+ 
 </div>

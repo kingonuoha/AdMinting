@@ -23,4 +23,9 @@ class Categories extends Model
     public function  listings(){
         return $this->belongsToMany(Listing::class);
     }
+
+    public function creatorListings()
+    {
+        return $this->morphedByMany(CreatorListing::class, 'listings', 'categories_listing');
+    }
 }

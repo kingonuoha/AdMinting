@@ -63,6 +63,8 @@ class AccountSecurity extends Component
        $this->dispatchBrowserEvent('success_alert',[
         'message'=> "password has been updated successfully, pls try not to forget your new password, as no one in AdMinting can help you out if you do!"
        ]);
+       createLog("your password was changed", getIcon('pencil'), 'danger');
+
     }
 
       /**
@@ -140,6 +142,8 @@ class AccountSecurity extends Component
         $this->dispatchBrowserEvent('success_alert', [
             'message'=> "You have been successfully logged out from previous logged in devices!"
         ]);
+       createLog("you logged out from other devices", getIcon('shield-user'), 'danger');
+
     }
 
     /**
@@ -225,6 +229,8 @@ class AccountSecurity extends Component
             'title' => "Successfull",
         ]);
         //send mail
+       createLog("card was deleted", getIcon('wallet'), 'danger');
+
     }
 
     // End session browser Algorithm 

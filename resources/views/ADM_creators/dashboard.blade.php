@@ -6,7 +6,8 @@
     @livewire('super-admin-dashboard')
 @elseif(auth()->user()->role == 'brand')
     @livewire('brand-dashboard')
-
+@else
+    @livewire('creator-dashboard', ["stats" => $topStats])
 @endif
 
 

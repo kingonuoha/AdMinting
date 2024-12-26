@@ -27,14 +27,14 @@
             {{-- <div style="width:220px; margin:18px 20px"> --}}
             <div style="display: flex; width:100%; margin:18px 20px">
                 <!--begin:Media-->
-                <img alt="" style="object-fit:cover; width:30%; border-radius:12px; margin:0 9px 9px" src="{{asset('storage/company_logo/'.$listing->logo)}}">
+                <img alt="" style="object-fit:cover; width:30%; border-radius:12px; margin:0 9px 9px" src="{{asset('storage/'.$listing->user->brandInfos->logo_path)}}">
                 <!--end:Media-->
                 <!--begin:Text-->
                <div style="width:50%">
                 <a href="#" style="color:#181C32; font-size: 14px; font-weight:600; display:block; margin-bottom:9px">{{$listing->title}}</a>
                 <!--begin:Text-->
                 <!--begin:Price-->
-                <span style="color:#7E8299; font-size: 10px; font-weight:600; display:block; line-height:1.1">{{(isset($listing->price))? '$'. $listing->price : "$12,000"}}</span>
+                <span style="color:#7E8299; font-size: 10px; font-weight:600; display:block; line-height:1.1">{{(isset($listing->price))? 'NGN'. formatMoney($listing->price) : "$12,000"}}</span>
                 <!--begin:Price-->
                 <!--begin:Username-->
                 <a href="#" style="color:#5E6278; font-size: 10px; font-weight:600">{{$brand->brand_name}}</a>

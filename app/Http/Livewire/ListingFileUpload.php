@@ -37,6 +37,8 @@ class ListingFileUpload extends Component
 
          $filename =  str_replace(' ', '_',  $file->getClientOriginalName());
          $folder = 'ListingsFiles/'.$listing_slug;
+        $upload = $file->move(public_path($path), $new_picture_name);
+         
          Storage::disk('public')->putFileAs($folder, $file, $filename);
          // $file->storeAs('ListingsFiles/', now(), $filename);
             $this->dispatchBrowserEvent('showToast', [
@@ -49,10 +51,13 @@ class ListingFileUpload extends Component
             $listingFiles->uploaded_by = auth()->user()->id;
             $listingFiles->size =  $sizeInMB;
             $listingFiles->type = $fileType;
+            $listingFiles->unique_hash = uniqid("adcre8-file", true);
             $listingFiles->folder = $folder;
             // $listingFiles->uploaded_by = auth()->user()->id;
             $listingFiles->save();
             redirect()->back();
+       createLog("you attatched a file to a listing", getIcon('file-up'), 'warning');
+
          return $folder;
         }
  

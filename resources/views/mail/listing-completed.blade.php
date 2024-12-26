@@ -21,7 +21,7 @@
 @endsection
 
     @section('mail_subBody')
-<tr style="display: flex; justify-content: center; margin:0 60px 35px 60px">
+<tr style="display: flex; justify-content: center; margin:0 20px 35px 20px">
     <td align="start" valign="start" style="padding-bottom: 10px;">
         <!--begin::Wrapper-->
         <div style="background: #F9F9F9; border-radius: 12px; padding:35px 30px">

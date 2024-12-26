@@ -12,6 +12,7 @@ class ListingShow extends Component
     public $listing;
     public $user;
     public $hasApplied = false;
+    public $termsAndConditions = false;
     public function mount(Listing $listing){
         // ->extends('layouts.ADM_app')
         $this->listing = $listing;
@@ -22,6 +23,12 @@ class ListingShow extends Component
     }
 
     public function applyJob(){
+        if (auth()->user()->getRoleNames()->first() == 'brand') {
+            return $this->dispatchBrowserEvent('error_alert', ['message' => "You cannot apply for listing at your current role, switch role to apply for this listing"]);
+        }
+        $this->validate([
+            "termsAndConditions" => "accepted"
+        ]);
         $this->listing->clicks()
         ->create([
             'user_id' => auth()->user()->id,
@@ -39,6 +46,8 @@ class ListingShow extends Component
         $this->dispatchBrowserEvent("success_alert", [
             'message' => "application has been successfully sent, expect a reply soon!"
         ]);
+       createLog("you applied for a listing", getIcon('briefcase'), 'success');
+
         //send an email to user
     }
     public function render()

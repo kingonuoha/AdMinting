@@ -14,6 +14,8 @@
 		<meta property="og:site_name" content="Keenthemes | Metronic" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
 		<link rel="shortcut icon" href="{{asset('users/assets/media/logos/favicon.ico')}}" />
+		<link href="{{asset('ijabo_crop_plugin/ijaboCropTool.min.css')}}" rel="stylesheet" type="text/css" />
+		<link href="{{asset('amsify/amsify.suggestags.css')}}" rel="stylesheet" type="text/css" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -76,6 +78,8 @@
 		<!--begin::Custom Javascript(used by this page)-->
 		<script src="{{asset('users/assets/js/custom/utilities/modals/create-account.js')}}"></script>
 		<!--end::Custom Javascript-->
+		<script src="{{asset('amsify/jquery.amsify.suggestags.js')}}"></script>
+		<script src="{{asset('ijabo_crop_plugin/ijaboCropTool.min.js')}}"></script>
 		<!--end::Javascript-->
 		
 	@livewireScripts
@@ -172,7 +176,7 @@
 				"hideMethod": "fadeOut"
 				};
 		
-		toastr.success("rogress has been saved Successfully", "Success!");
+		toastr.success("progress has been saved Successfully", "Success!");
 			KTUtil.scrollTop();
 	})
 
