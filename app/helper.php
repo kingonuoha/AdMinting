@@ -3,20 +3,24 @@
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Listing;
+use App\Models\Categories;
 use App\Models\AppSettings;
 use Illuminate\Support\Str;
 use App\Models\ListingFiles;
 use App\Mail\MailNotification;
+use App\Models\CreatorListing;
+use App\Models\Socials\SocialPage;
 use Illuminate\Support\Facades\DB;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\ADMDbNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Log;
 
 
 
-if (!function_exists("mailNotify")) {
+if (!function_exists(function: "mailNotify")) {
   /**
    * SENDING EMAIL NOTIFICATIONS TO USERS 
    * format* 
@@ -89,23 +93,38 @@ if (!function_exists("sendMail")) {
   }
 }
 if (!function_exists("guest_nav_links")) {
-  function guest_nav_links()
+  function guest_nav_links($all = true)
   {
+    if($all){
     return [
-      ['name' => 'Home', 'url' => route('guest.home')],
-      ['name' => 'Brands', 'url' => [
-        ['Create Listings', route('listing.create')],
-      ]],
-      ['name' => 'Creators', 'url' => [
-        ['Find Creators', route('guest.find_creators')],
-        ['Listings', route('listing.index')],
-      ]],
-      ['name' => 'Others', 'url' => [
-        ['Privacy Policy', route('guest.privacy_policy')],
-        ['Terms of Service', route('guest.privacy_policy')],
-        ['Whats new?', route('changelog')]
-      ]],
+      ['name' => 'For Brands', 'url' => route('guest.brands')],
+      ['name' => 'For Creators', 'url' => route('guest.creators')],
+      ['name' => 'Privacy Policy', 'url' => route('guest.privacy_policy', ['section' => 'privacy'])],
+      ['name' => 'Terms of Service', 'url' => route('guest.privacy_policy', ['section' => 'terms'])],
+      ['name' => 'Whats new?', 'url' => route('changelog')],
     ];
+
+    }else{
+
+    return [
+      // ['name' => 'Home', 'url' => route('guest.home')],
+      // ['name' => 'Brands', 'url' => [
+      //   ['Create Listings', route('listing.create')],
+      // ]],
+      // ['name' => 'Creators', 'url' => [
+      //   ['Find Creators', route('guest.find_creators')],
+      //   ['Listings', route('listing.index')],
+      // ]],
+      // ['name' => 'Others', 'url' => [
+      //   ['Privacy Policy', route('guest.privacy_policy')],
+      //   ['Terms of Service', route('guest.privacy_policy')],
+      //   ['Whats new?', route('changelog')]
+      // ]],
+      ['name' => 'For Brands', 'url' => route('guest.brands')],
+      ['name' => 'Terms of Service', 'url' => route('guest.privacy_policy', ['section' => 'terms'])],
+      ['name' => 'Whats new?', 'url' => route('changelog')],
+    ];
+  }
   }
 }
 // rocket, 
@@ -303,95 +322,96 @@ if (!function_exists("get_guest_testimonials")) {
   }
 }
 
+
 /**
- * DATE FORMAT eg. time ago 
+ * DATE FORMAT eg. time ago or in the future
  */
 if (!function_exists("time_Ago")) {
   function time_Ago($time)
   {
-
     $time = strtotime($time);
-    // Calculate difference between current
-    // time and given timestamp in seconds
-    $diff     = time() - $time;
+    $diff = time() - $time;
 
     // Time difference in seconds
-    $sec     = $diff;
+    $sec = abs($diff);
 
     // Convert time difference in minutes
-    $min     = round($diff / 60);
+    $min = round($sec / 60);
 
     // Convert time difference in hours
-    $hrs     = round($diff / 3600);
+    $hrs = round($sec / 3600);
 
     // Convert time difference in days
-    $days     = round($diff / 86400);
+    $days = round($sec / 86400);
 
     // Convert time difference in weeks
-    $weeks     = round($diff / 604800);
+    $weeks = round($sec / 604800);
 
     // Convert time difference in months
-    $mnths     = round($diff / 2600640);
+    $mnths = round($sec / 2600640);
 
     // Convert time difference in years
-    $yrs     = round($diff / 31207680);
+    $yrs = round($sec / 31207680);
+
+    // Determine if the time is in the past or future
+    $isPast = $diff > 0;
 
     // Check for seconds
     if ($sec <= 60) {
-      echo "$sec sec ago";
+      echo $isPast ? "$sec sec ago" : "in $sec sec";
     }
 
     // Check for minutes
     else if ($min <= 60) {
       if ($min == 1) {
-        echo "one min ago";
+        echo $isPast ? "one min ago" : "in one min";
       } else {
-        echo "$min mins ago";
+        echo $isPast ? "$min mins ago" : "in $min mins";
       }
     }
 
     // Check for hours
     else if ($hrs <= 24) {
       if ($hrs == 1) {
-        echo "an hr ago";
+        echo $isPast ? "an hr ago" : "in an hr";
       } else {
-        echo "$hrs hrs ago";
+        echo $isPast ? "$hrs hrs ago" : "in $hrs hrs";
       }
     }
 
     // Check for days
     else if ($days <= 7) {
       if ($days == 1) {
-        echo "Yesterday";
+        echo $isPast ? "Yesterday" : "Tomorrow";
       } else {
-        echo "$days days ago";
+        echo $isPast ? "$days days ago" : "in $days days";
       }
     }
 
     // Check for weeks
     else if ($weeks <= 4.3) {
       if ($weeks == 1) {
-        echo "a week ago";
+        echo $isPast ? "a week ago" : "in a week";
       } else {
-        echo "$weeks weeks ago";
+        echo $isPast ? "$weeks weeks ago" : "in $weeks weeks";
       }
     }
 
     // Check for months
     else if ($mnths <= 12) {
       if ($mnths == 1) {
-        echo "a mth ago";
+        echo $isPast ? "a mth ago" : "in a mth";
       } else {
-        echo "$mnths mths ago";
+        echo $isPast ? "$mnths mths ago" : "in $mnths mths";
       }
     }
 
     // Check for years
     else {
       if ($yrs == 1) {
-        echo "a yr ago";
+        echo $isPast ? "a yr ago" : "in a yr";
       } else {
-        echo "$yrs yrs ago";
+        echo $isPast ? "$yrs yrs ago" : "in $yrs yrs";
       }
     }
   }
@@ -425,6 +445,9 @@ if (!function_exists("fetchFeaturedCreators")) {
 if (!function_exists("percent_two_values")) {
   function percent_two_values($section, $total)
   {
+    if($total <= 0){
+      return "Nan";
+    }
     return round((($section / $total) * 100), 0, PHP_ROUND_HALF_UP);
   }
 }
@@ -472,15 +495,31 @@ if (!function_exists("getUserNotifications")) {
 if (!function_exists("saveTransaction")) {
   function saveTransaction($data, $message, $user = null)
   {
-    if ($user == null) {
+    if (is_null($user)) {
       $user = User::find(auth()->user()->id);
+    }
+
+    // Ensure $user is an instance of User model, if not, try to fetch it.
+    if (!$user instanceof User && is_numeric($user)) {
+        $user = User::find($user);
+    }
+
+    // If user is still not found or not a User instance, log an error or handle appropriately.
+    if (!$user instanceof User) {
+        Log::error("saveTransaction: Invalid user provided or user not found.");
+        return; // Or throw an exception
+    }
+
+    // Ensure $data is an object
+    if (is_array($data)) {
+        $data = (object) $data;
     }
 
     //    save transaction in db
     $user->transactions()->firstOrCreate([
       'transaction_id' => $data->id,
     ], [
-      'user_id' => $user,
+      // 'user_id' => $user->id, // Eloquent handles this automatically when using $user->transactions()
       'transaction_id' => $data->id,
       'message' => (is_null($data->message)) ? $message : $data->message,
       'paid_for' => $message,
@@ -621,6 +660,72 @@ if (!function_exists('countFiles')) {
 
 
 /**
+ * Get suggestions based on search 
+ *
+ * @param string $query to be searched from categories, creator listings and social pages
+ */
+
+ if (!function_exists('fetchSearchSuggestions')) {
+  function fetchSearchSuggestions($query)
+  {
+    // dd($query);
+      $categories = Categories::search($query)
+          ->select(['category_name as name', 'category_slug as slug', DB::raw("'category' as type")])
+          ->take(5) // Limit to 5 suggestions
+          ->get()
+          ->map(function ($item) {
+              $item->icon = getIcon('briefcase'); // Replace 'category' with the appropriate icon name
+              $item->is_svg = true; // Indicate that this is an SVG icon
+              return $item;
+          });
+
+      $creatorListings = CreatorListing::search($query)
+          ->select(['title as name', 'slug', 'media', DB::raw("'creator' as type")])
+          ->take(5)
+          ->get()
+          ->map(function ($item) {
+              $media = $item->media;
+              $creator = $item->user;
+              $firstImage = collect($media)->firstWhere('type', 'image');
+              $item->icon = $firstImage->url ?? getIcon('pencil'); // Use first image URL if available, otherwise use default icon
+              $item->is_svg = !isset($firstImage->url); // Indicate if this is an SVG icon
+              $item->username = $creator->username ?? "--";
+              return $item;
+          });
+
+      $socialHandles = SocialPage::search($query)
+          ->select(['page_name as name', 'id as slug', 'platform as description', 'picture', DB::raw("'social' as type")])
+          ->take(5)
+          ->get()
+          ->map(function ($item) {
+              $picture = $item->picture;
+              $item->icon = $picture->url ?? getIcon('users'); // Use picture URL if available, otherwise use default icon
+              $item->is_svg = !isset($picture->url); // Indicate if this is an SVG icon
+              return $item;
+          });
+
+      $users = User::creators()->search($query)
+          ->select(['id', 'name', 'username', 'profile_photo_path as profile_image', DB::raw("'user' as type")])
+          ->take(5)
+          ->get()
+          ->map(function ($item) {
+              $sumFollowers =  getUserFollowers($item);
+              $item->description = formatNumber($sumFollowers) . ' followers';
+              $item->icon = $item->profile_image ?? getIcon('user'); // Use profile image URL if available, otherwise use default icon
+              $item->is_svg = !isset($item->profile_image); // Indicate if this is an SVG icon
+              return $item;
+          });
+
+      return [
+          'categories' => $categories,
+          'creatorListings' => $creatorListings,
+          'socialHandles' => $socialHandles,
+          'users' => $users,
+      ];
+  }
+}
+
+/**
  * Get Folder Size
  *
  * @param string $folderPath the path to the specified folder
@@ -758,7 +863,7 @@ if (!function_exists('popular_listing')) {
     }
     //   return $category_id_list ;
     $related_listings = Listing::inRandomOrder()->take($amount)->whereHas('categories', function ($query) use ($category_id_list) {
-      $query->whereIn('categories_id', $category_id_list);
+      $query-formatNumber(43, true)>whereIn('categories_id', $category_id_list);
     })->where(['is_active' => true, 'payment_status' => "paid"])->where('id', '!=', $listing_id)->get();
 
     return  $related_listings;
@@ -864,7 +969,7 @@ if (!function_exists('get_last_seen')) {
   {
     $last_seen =  DB::table('sessions')->where('user_id', $user_id)->orderBy('last_activity', 'desc')
       ->first();
-    $timestamp = $last_seen->last_activity; // Replace with your timestamp
+    $timestamp = $last_seen->last_activity ?? 0000; // Replace with your timestamp
 
     // Create a Carbon instance from the timestamp
     $datetime = Carbon::createFromTimestamp($timestamp);
@@ -936,8 +1041,8 @@ if (!function_exists('getPlatformColorClass')) {
 
           ],
           'tiktok' => [
-              'theme' => 'white',
-              'text' => 'text-white',
+              'theme' => 'dark',
+              'text' => 'text-dark',
               'background' => 'bg-black',
               'button' => 'bg-radial-gradient-black',
               'border' => 'border-black',
@@ -1018,7 +1123,7 @@ if (!function_exists('getIcon')) {
    * bell_box, 
    * spanner].
    *
-   * @param int $type is the specified icon.
+   * @param string $type is the specified icon.
    */
   function getIcon($type)
   {
@@ -1323,8 +1428,169 @@ if (!function_exists('getIcon')) {
   }
 }
 
+if (!function_exists('getUserFollowers')) {
+    function getUserFollowers(User $user)
+    {
+        $socialAccounts = $user->socialAccounts;
+        $followers = 0;
+
+        foreach ($socialAccounts as $account) {
+            $pages = $account->socialPages ?? [];
+            foreach ($pages as $page) {
+                $followers += $page->metrics()->firstWhere("name", "followers")->value ?? 0;
+            }
+        }
+
+        return $followers;
+    }
+}
+
+if (!function_exists('getPhylloConfig')) {
+    /**
+     * Get Phyllo configuration for the current user.
+     * If the user doesn't have a Phyllo ID, create the user and generate an SDK token.
+     *
+     * @param \App\Models\User $user
+     * @return array
+     */
+    function getPhylloConfig($user)
+    {
+        // Ensure the user is authenticated
+        if (!$user) {
+            throw new Exception('User must be authenticated to use Phyllo.');
+        }
+
+        $phylloClient = app(\App\Services\PhylloClient::class);
+        // Check if the user already has a Phyllo ID
+        if (!$user->phyllo_user_id) {
+            // Use the PhylloClient service to create a user on Phyllo
+            $response = $phylloClient->createUser($user->name, $user->email);
+            if(isset($response["error"]) && $response["error"]["error_code"] === 'user_exists_with_external_id'){
+              $response =  $phylloClient->getUserByExternalId($user->email);
+              // dd($response);
+          }else if(isset($response["error"])){
+              dd($response);
+            
+          }
+            // Save the Phyllo user ID to the database
+            $user->update(['phyllo_user_id' => $response['id']]);
+          }
+          
+          
+          // Check if the user already has an SDK token
+          $sdkData = $user->phyllo_sdk;
+
+         if ($sdkData && isset($sdkData['sdk_token'], $sdkData['expires_at'])) {
+             // Check if the SDK token has expired
+             $expiresAt = Carbon::parse($sdkData['expires_at']);
+             if ($expiresAt->isFuture()) {
+                 // Return the existing SDK token if it hasn't expired
+                 return [
+                     'clientDisplayName' => config("app.name"), // Your app name
+                     'environment' => config('phyllo.environment'), // 'production' or 'sandbox'
+                     'userId' => $user->phyllo_user_id,
+                     'token' => $sdkData['sdk_token'],
+                 ];
+             }
+         }
+ 
+         // Generate a new SDK token if it doesn't exist or has expired
+         $sdkResponse = $phylloClient->generateSdkToken($user->phyllo_user_id, config("phyllo.products"));
+          if(isset($sdkResponse["error"]) ){
+            // Return the new SDK token configuration
+         return [
+             'clientDisplayName' => config("app.name"), // Your app name
+             'environment' => config('phyllo.environment'), // 'production' or 'sandbox'
+             'userId' => null,
+             'token' => null,
+         ];
+          }else{
+            // Save the new SDK token and expiration date to the database
+         $user->update([
+             'phyllo_sdk' => [
+                 'sdk_token' => $sdkResponse['sdk_token'],
+                 'expires_at' => Carbon::now()->addSeconds($sdkResponse['expires_at'])->toISOString(),
+             ],
+         ]);
+ 
+         // Return the new SDK token configuration
+         return [
+             'clientDisplayName' => config("app.name"), // Your app name
+             'environment' => config('phyllo.environment'), // 'production' or 'sandbox'
+             'userId' => $user->phyllo_user_id,
+             'token' => $sdkResponse['sdk_token'],
+         ];
+          }
+         
+     }
+}
 
 
+if (!function_exists('get0AuthSocials')) {
+    /**
+     * Get OAuth Socials based on environment.
+     *
+     * @return array
+     */
+    function get0AuthSocials()
+    {
+        $socials = [
+            [
+                'name' => 'Facebook',
+                "desc" => "Connect with Friends and Clients",
+                'redirect_url' => route('facebook.redirect'), // Replace with your actual route
+                'logo' => asset('users/assets/media/svg/brand-logos/facebook-4.svg'),
+                'show_in_production' => false, // Hide in production
+
+            ],
+            [
+                'name' => 'Google',
+                "desc" => "Plan properly your workflow",
+                'redirect_url' => route('google.redirect', ["authUser"=> auth()->user()->id ?? null]), // Replace with your actual route
+                'logo' => asset('users/assets/media/svg/brand-logos/youtube-3.svg'),
+                'show_in_production' => true, // Only show in production
+            ],
+            [
+                'name' => 'Instagram',
+                "desc" => "Share Ideas",
+                'redirect_url' => route('facebook.redirect'), // Replace with your actual route
+                'logo' => asset('users/assets/media/svg/brand-logos/instagram-2-1.svg'),
+                'show_in_production' => false, // Only show in production
+            ],
+            [
+              'name' => 'Tiktok',
+              "desc" => "Share Ideas",
+              'redirect_url' => route('tiktok.redirect'), // Replace with your actual route
+              'logo' => asset('users/assets/media/svg/brand-logos/tiktok.svg'),
+              'show_in_production' => false, // Hide in production
+            ],
+            [
+              'name' => 'Phyllo',
+              "desc" => "Connect You Tiktok, Instagram and Facebook To Adcrea8",
+              'redirect_url' => ["type"=> "button", "id" => "connectPhyllo"], // Replace with your actual route
+              'logo' => asset('users/assets/media/svg/brand-logos/phyllo.ico'),
+              'show_in_production' => false, // Hide in production
+            ],
+        ];
+
+        // Filter socials based on environment
+        if (app()->environment('production')) {
+            // Only return socials marked as `show_in_production`
+            return collect($socials)->filter(function ($social) {
+                return $social['show_in_production'];
+            })->map(function ($social) {
+                // Remove the `show_in_production` key before returning
+                return collect($social)->except('show_in_production')->toArray();
+            })->toArray();
+        }
+
+        // Return all socials in non-production environments
+        return collect($socials)->map(function ($social) {
+            // Remove the `show_in_production` key before returning
+            return collect($social)->except('show_in_production')->toArray();
+        })->toArray();
+    }
+}
 
 
 if (!function_exists('isImage')) {
@@ -1366,16 +1632,22 @@ if (!function_exists('saveAvatar')) {
 
 
 
+
+if (!function_exists('notify_admin')) {
+
 /**
  *SENDING DB NOTIFICATIONS TO ADMIN
  */
-if (!function_exists('notify_admin')) {
-  function notify_admin($title, $msg = null, $type = 'success', $icon = 'users')
-  {
-    // return   //send emails to users 
-    $admin = User::where('role', '==', 2)->get();
-    dbNotify($title, $msg, $type, $admin, $icon, true);
-  }
+
+ 
+    function notify_admin($title, $msg = null, $type = 'success', $icon = 'users')
+    {
+        // Fetch all users with the 'admin' role using Spatie
+        $admins = \App\Models\User::role('admin')->get();
+
+        // Send notifications to all admin users
+        dbNotify($title, $msg, $type, $admins, $icon, true);
+    }
 }
 
 
